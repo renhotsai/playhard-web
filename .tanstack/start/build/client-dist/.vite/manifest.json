@@ -1,0 +1,72 @@
+{
+  "../../../../~start/default-client-entry.tsx": {
+    "file": "assets/main-ClKoHfKt.js",
+    "name": "main",
+    "src": "../../../../~start/default-client-entry.tsx",
+    "isEntry": true,
+    "dynamicImports": [
+      "src/routes/index.tsx?tsr-split=component",
+      "src/routes/contact/index.tsx?tsr-split=component",
+      "src/routes/about/index.tsx?tsr-split=component",
+      "src/routes/script/$id.tsx?tsr-split=errorComponent",
+      "src/routes/script/$id.tsx?tsr-split=component"
+    ],
+    "css": [
+      "assets/main-Bm3BFSG0.css"
+    ]
+  },
+  "_separator-0gN5VOI3.js": {
+    "file": "assets/separator-0gN5VOI3.js",
+    "name": "separator",
+    "imports": [
+      "../../../../~start/default-client-entry.tsx"
+    ]
+  },
+  "src/routes/about/index.tsx?tsr-split=component": {
+    "file": "assets/index-DJjw-dNN.js",
+    "name": "index",
+    "src": "src/routes/about/index.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../~start/default-client-entry.tsx"
+    ]
+  },
+  "src/routes/contact/index.tsx?tsr-split=component": {
+    "file": "assets/index-BfuWkgpJ.js",
+    "name": "index",
+    "src": "src/routes/contact/index.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../~start/default-client-entry.tsx"
+    ]
+  },
+  "src/routes/index.tsx?tsr-split=component": {
+    "file": "assets/index-BX18kTU6.js",
+    "name": "index",
+    "src": "src/routes/index.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../~start/default-client-entry.tsx",
+      "_separator-0gN5VOI3.js"
+    ]
+  },
+  "src/routes/script/$id.tsx?tsr-split=component": {
+    "file": "assets/_id-BJCBcucX.js",
+    "name": "_id",
+    "src": "src/routes/script/$id.tsx?tsr-split=component",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../~start/default-client-entry.tsx",
+      "_separator-0gN5VOI3.js"
+    ]
+  },
+  "src/routes/script/$id.tsx?tsr-split=errorComponent": {
+    "file": "assets/_id-CldAg2U3.js",
+    "name": "_id",
+    "src": "src/routes/script/$id.tsx?tsr-split=errorComponent",
+    "isDynamicEntry": true,
+    "imports": [
+      "../../../../~start/default-client-entry.tsx"
+    ]
+  }
+}

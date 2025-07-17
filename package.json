@@ -1,0 +1,44 @@
+{
+  "name": "playhard-web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.31.0",
+    "@types/eslint__js": "^8.42.3",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@typescript-eslint/eslint-plugin": "^8.37.0",
+    "@typescript-eslint/parser": "^8.37.0",
+    "eslint": "^9.31.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.37.0",
+    "vite": "^7.0.3",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "dependencies": {
+    "@radix-ui/react-icons": "^1.3.2",
+    "@radix-ui/react-separator": "^1.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@tailwindcss/typography": "^0.5.16",
+    "@tanstack/react-router": "^1.125.6",
+    "@tanstack/react-start": "^1.125.6",
+    "autoprefixer": "^10.4.21",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "embla-carousel-react": "^8.6.0",
+    "lucide-react": "^0.525.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^4.1.11"
+  }
+}
