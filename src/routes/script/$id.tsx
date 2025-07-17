@@ -6,7 +6,6 @@ import { Badge } from '../../components/ui/badge'
 import { Button } from '../../components/ui/button'
 import { Separator } from '../../components/ui/separator'
 import { ArrowLeft, Heart, Share2, Star, Users, Clock, Target } from 'lucide-react'
-import { cn } from '../../lib/utils'
 
 export const Route = createFileRoute('/script/$id')({
   component: ScriptDetail,

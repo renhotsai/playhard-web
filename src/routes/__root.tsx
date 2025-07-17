@@ -82,10 +82,52 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 	return (
-		<html>
+		<html lang="zh-TW">
 		<head>
 			<HeadContent />
-			<title>PlayHard 劇本殺</title>
+			<title>PlayHard 劇本殺 - 沉浸式劇本殺體驗平台</title>
+			<meta name="description" content="PlayHard 劇本殺提供豐富的劇本殺遊戲資源，包含推理、恐怖、奇幻等多種類型劇本。探索無盡的故事世界，體驗沉浸式角色扮演樂趣。" />
+			<meta name="keywords" content="劇本殺, 劇本, 角色扮演, 推理遊戲, 桌遊, 沉浸式體驗, 故事遊戲" />
+			<meta name="author" content="PlayHard 劇本殺" />
+			<meta name="robots" content="index, follow" />
+			<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+			
+			{/* Open Graph tags */}
+			<meta property="og:title" content="PlayHard 劇本殺 - 沉浸式劇本殺體驗平台" />
+			<meta property="og:description" content="探索豐富的劇本殺遊戲資源，體驗沉浸式角色扮演樂趣。" />
+			<meta property="og:type" content="website" />
+			<meta property="og:image" content="/og-image.jpg" />
+			<meta property="og:site_name" content="PlayHard 劇本殺" />
+			<meta property="og:locale" content="zh_TW" />
+			
+			{/* Twitter Card tags */}
+			<meta name="twitter:card" content="summary_large_image" />
+			<meta name="twitter:title" content="PlayHard 劇本殺 - 沉浸式劇本殺體驗平台" />
+			<meta name="twitter:description" content="探索豐富的劇本殺遊戲資源，體驗沉浸式角色扮演樂趣。" />
+			<meta name="twitter:image" content="/og-image.jpg" />
+			
+			{/* Favicon */}
+			<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+			<link rel="alternate icon" href="/favicon.ico" />
+			
+			{/* Theme color for mobile browsers */}
+			<meta name="theme-color" content="#8b0000" />
+			
+			{/* Structured data */}
+			<script type="application/ld+json">
+				{JSON.stringify({
+					"@context": "https://schema.org",
+					"@type": "WebSite",
+					"name": "PlayHard 劇本殺",
+					"description": "沉浸式劇本殺體驗平台",
+					"url": "https://playhard.tw",
+					"potentialAction": {
+						"@type": "SearchAction",
+						"target": "https://playhard.tw/search?q={search_term_string}",
+						"query-input": "required name=search_term_string"
+					}
+				})}
+			</script>
 		</head>
 		<body>
 		{children}

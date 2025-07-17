@@ -1,4 +1,3 @@
-import { Heart } from 'lucide-react'
 
 export interface Category {
   id: string

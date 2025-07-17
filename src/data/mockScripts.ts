@@ -407,3 +407,15 @@ export const getRecommendedScripts = (scripts: Script[], limit: number = 4): Scr
 export const getScriptById = (scripts: Script[], id: string): Script | undefined => {
   return scripts.find(script => script.id === id)
 }
+
+// 輔助函數：獲取所有唯一標籤
+export const getAllUniqueTags = (scripts: Script[]): string[] => {
+  const allTags = scripts.flatMap(script => script.tags)
+  return Array.from(new Set(allTags))
+}
+
+// 輔助函數：根據標籤篩選劇本
+export const getScriptsByTag = (scripts: Script[], tag: string): Script[] => {
+  return scripts.filter(script => script.tags.includes(tag))
+}
+
