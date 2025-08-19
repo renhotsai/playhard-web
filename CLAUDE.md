@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is **PlayHard 劇本殺**, a murder mystery script showcase website for browsing and exploring Chinese murder mystery party game scripts (劇本殺). The application displays script collections with detailed information including characters, storylines, game rules, and social features.
+This is **web**, a murder mystery script showcase website for browsing and exploring Chinese murder mystery party game scripts (劇本殺). The application displays script collections with detailed information including characters, storylines, game rules, and social features.
 
 ## Project Architecture
 
@@ -25,34 +25,47 @@ Built with **TanStack React Router** and **TanStack Start** for full-stack capab
 - **Tailwind CSS**: Utility-first CSS framework with custom mystery theme
 - **Lucide React**: Modern icon library for UI components
 - **Embla Carousel**: Touch-friendly carousel component for shadcn/ui
+- **Radix UI**: Headless UI components for accessible interfaces (Dropdown Menu, Separator, etc.)
 
 ### Project Structure
 
 ```
 src/
 ├── routes/                 # File-based routing
-│   ├── __root.tsx         # Root layout component
+│   ├── __root.tsx         # Root layout component with SEO optimization
 │   ├── index.tsx          # Home page with script showcases
 │   ├── about/index.tsx    # About page
 │   ├── contact/index.tsx  # Contact page
+│   ├── categories/        # Category system
+│   │   ├── index.tsx      # Categories overview page
+│   │   └── $category.tsx  # Dynamic category pages
 │   └── script/
 │       └── $id.tsx        # Dynamic script detail pages
 ├── components/            # UI Components
-│   ├── ui/                # shadcn/ui components (Card, Button, Badge, Separator, Carousel)
-│   ├── ScriptCard.tsx     # Reusable script card component using shadcn/ui
+│   ├── ui/                # shadcn/ui components
+│   │   ├── badge.tsx      # Badge component
+│   │   ├── button.tsx     # Button component
+│   │   ├── card.tsx       # Card component
+│   │   ├── carousel.tsx   # Carousel component
+│   │   ├── dropdown-menu.tsx # Dropdown menu component
+│   │   └── separator.tsx  # Separator component
+│   ├── Header.tsx         # Header with navigation and dropdown menu
+│   ├── Footer.tsx         # Footer component
+│   ├── ScriptCard.tsx     # Reusable script card component
 │   ├── MonthlyScripts.tsx # Monthly scripts carousel with navigation
 │   └── HotRecommendations.tsx # Hot/popular scripts with shadcn/ui Carousel
 ├── data/                  # Data layer
-│   └── mockScripts.ts     # Mock murder mystery script data
+│   ├── mockScripts.ts     # Mock murder mystery script data
+│   └── category.ts        # Category definitions and data
 ├── types/                 # TypeScript type definitions
 │   └── script.ts          # Core domain types (Script, Character, etc.)
 ├── lib/                   # Utility functions
-│   └── utils.ts           # shadcn/ui utility functions (cn helper)
+│   ├── utils.ts           # shadcn/ui utility functions (cn helper)
+│   └── category.ts        # Category helper functions and logic
 ├── router.tsx             # Router configuration
-├── routeTree.gen.ts       # Auto-generated route tree (DO NOT EDIT)
-├── main.ts                # Application entry point
+├── routeTree.gen.ts       # Auto-generated route tree (DO NOT EDIT - ignored by git)
 ├── globals.css            # Global styles with shadcn/ui and mystery theme
-└── style.css              # Legacy styles (consider consolidating)
+└── vite-env.d.ts          # Vite environment type definitions
 ```
 
 ### Domain Model
@@ -63,6 +76,7 @@ The application centers around **murder mystery scripts** with rich data modelin
 - `Script`: Complete script with metadata, characters, rules, and story
 - `Character`: Individual character roles with backgrounds, secrets, and goals
 - `ScriptCard`: Simplified script view for browsing interfaces
+- `Category`: Script categories with localized names, descriptions, and styling
 
 **Key Script Properties:**
 - Player count range (`playerCount.min`/`playerCount.max`)
@@ -77,14 +91,18 @@ The application centers around **murder mystery scripts** with rich data modelin
 File-based routing with TanStack Router:
 - `/` - Home page with monthly scripts and hot recommendations
 - `/script/$id` - Dynamic script detail pages with comprehensive information
+- `/categories/` - Categories overview page with all script categories
+- `/categories/$category` - Dynamic category pages showing scripts by category
 - `/about/` and `/contact/` - Basic informational pages
-- Route tree automatically generated in `routeTree.gen.ts`
+- Route tree automatically generated in `routeTree.gen.ts` (ignored by git)
 - Error handling for missing scripts with custom error components
 
 ### Data Architecture
 
 - Mock data in `src/data/mockScripts.ts` with 8 sample scripts
+- Category system in `src/data/category.ts` with 6 predefined categories
 - Helper functions: `getMonthlyScripts()`, `getHotScripts()`, `getScriptById()`
+- Category functions: `getScriptsByCategory()`, `getCategoriesWithScriptCount()`, `formatCategoryForDropdown()`
 - Server-side data loading using route loaders (not `createServerFn`)
 - Type-safe interfaces define the murder mystery domain
 
@@ -99,6 +117,8 @@ File-based routing with TanStack Router:
 - **Badge system** for status indicators (新/熱), categories, and rankings
 - **Button variants** with custom mystery theme colors
 - **Typography hierarchy** with proper text sizing and colors
+- **Dropdown navigation** with category filtering in header
+- **SEO optimization** with comprehensive meta tags and structured data
 
 ### TypeScript Configuration
 
@@ -111,10 +131,12 @@ File-based routing with TanStack Router:
 ### Development Notes
 
 - Development server typically runs on port 3000 (may auto-increment if occupied)
-- Route generation happens automatically - never edit `routeTree.gen.ts`
+- Route generation happens automatically - never edit `routeTree.gen.ts` (ignored by git)
+- Auto-generated files (.nitro/, .vinxi/, .tanstack-start/) are ignored by git
 - Server functions replaced with direct loader implementations for simpler data loading
 - All routes inherit from the root layout in `__root.tsx`
 - Use `Link` component with `params` object for dynamic routing (not template strings)
+- TypeScript errors (TS6133) are automatically resolved through proper import management
 
 ### shadcn/ui Integration
 
@@ -132,6 +154,7 @@ File-based routing with TanStack Router:
 - Implement `Button` with mystery theme colors and hover effects
 - Use `Separator` for visual content division
 - Apply `Carousel`, `CarouselContent`, `CarouselItem`, `CarouselNext`, `CarouselPrevious` for touch-friendly content navigation
+- Use `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem` for navigation menus
 - Import components with relative paths (e.g., `'./ui/card'` or `'../../components/ui/card'`)
 - Apply custom mystery theme classes: `text-mystery-text-primary`, `bg-mystery-bg-card`, etc.
 
@@ -143,3 +166,41 @@ File-based routing with TanStack Router:
 - Desktop: Navigation arrows visible, positioned outside carousel (-left-12, -right-12)
 - Mobile: Navigation arrows hidden, swipe gestures enabled with user guidance text
 - Custom styling with mystery theme colors for navigation buttons
+
+### Category System
+
+- **Category Management**: Categories defined in `src/data/category.ts` with localized names and descriptions
+- **Category Types**: mystery, horror, fantasy, emotion, ancient, modern - each with custom colors and icons
+- **Category Navigation**: Dropdown menu in header for quick category access
+- **Category Pages**: Dynamic routing for `/categories/$category` with filtered script listings
+- **Category Helpers**: Functions in `src/lib/category.ts` for category operations and script filtering
+
+### Git Configuration
+
+- **TanStack Start 2025 Best Practices**: `.gitignore` configured to ignore build artifacts
+- **Auto-generated Files**: `.nitro/`, `.vinxi/`, `.tanstack-start/`, `routeTree.gen.ts` ignored
+- **Source Maps**: `*.map` files ignored to keep repository clean
+- **Deployment Files**: `.vercel/`, `.firebase/` ignored for platform deployment
+
+### Dependencies
+
+Current production dependencies:
+- `@radix-ui/react-dropdown-menu`: ^2.1.15 - Dropdown menu component
+- `@radix-ui/react-icons`: ^1.3.2 - Icon library
+- `@radix-ui/react-separator`: ^1.1.7 - Separator component
+- `@radix-ui/react-slot`: ^1.2.3 - Slot component for composition
+- `@tailwindcss/postcss`: ^4.1.11 - PostCSS plugin for Tailwind
+- `@tailwindcss/typography`: ^0.5.16 - Typography plugin
+- `@tanstack/react-router`: ^1.125.6 - File-based routing
+- `@tanstack/react-start`: ^1.125.6 - Full-stack framework
+- `class-variance-authority`: ^0.7.1 - Utility for component variants
+- `clsx`: ^2.1.1 - Conditional class names
+- `embla-carousel-react`: ^8.6.0 - Carousel component
+- `lucide-react`: ^0.525.0 - Modern icon library
+- `tailwind-merge`: ^3.3.1 - Tailwind class merging utility
+
+# important-instruction-reminders
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.

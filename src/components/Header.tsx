@@ -24,7 +24,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  title = 'PlayHard 劇本殺',
+  title = 'web',
   subtitle = '沉浸式體驗，探索無盡的劇本世界',
   showStats = false,
   totalScripts = 0,

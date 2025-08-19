@@ -14,7 +14,7 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
     )}>
       <div className="container mx-auto px-4 text-center">
         <p className="text-mystery-text-secondary mb-4">
-          © 2024 PlayHard 劇本殺. All rights reserved.
+          © 2024 web. All rights reserved.
         </p>
         <div className="flex justify-center gap-6">
           <Link 

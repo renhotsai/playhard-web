@@ -33,7 +33,7 @@ export const ScriptCard: React.FC<ScriptCardProps> = ({ script, className = '' }
         <div className="relative overflow-hidden">
           <img 
             src={script.coverImage} 
-            alt={`${script.title} - 劇本殺遊戲封面`} 
+            alt={`${script.title} - web劇本殺遊戲封面`} 
             className="w-full h-48 sm:h-40 md:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
             decoding="async"
