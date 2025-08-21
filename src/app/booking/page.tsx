@@ -8,18 +8,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useScripts } from "@/hooks/use-scripts";
-
-const timeSlots = [
-  "14:00-17:00",
-  "15:00-18:00", 
-  "18:00-21:00",
-  "19:00-22:00"
-];
+import { Badge } from "@/components/ui/badge";
+import { useScripts, useAvailableTimeSlots, useBookingInfo, useSubmitBooking } from "@/hooks/use-scripts";
 
 export default function BookingPage() {
   const [minDate, setMinDate] = useState("");
   const { data: scripts, isLoading: scriptsLoading, error: scriptsError } = useScripts();
+  const { data: timeSlots, isLoading: timeSlotsLoading, error: timeSlotsError } = useAvailableTimeSlots();
+  const { data: bookingInfo, isLoading: bookingInfoLoading } = useBookingInfo();
+  const submitBookingMutation = useSubmitBooking();
   
   const [formData, setFormData] = useState({
     name: "",
@@ -62,8 +59,31 @@ export default function BookingPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      alert("預約申請已送出，我們將盡快與您聯繫確認！");
-      console.log("預約資料:", formData);
+      submitBookingMutation.mutate(formData, {
+        onSuccess: (response) => {
+          if (response.success) {
+            alert(`${response.message}\n預約編號：${response.bookingId}`);
+            // Reset form
+            setFormData({
+              name: "",
+              phone: "",
+              email: "",
+              date: "",
+              time: "",
+              script: "",
+              players: "",
+              notes: ""
+            });
+            setErrors({});
+          } else {
+            alert(response.message);
+          }
+        },
+        onError: (error) => {
+          alert("預約送出時發生錯誤，請稍後再試或直接撥打客服專線。");
+          console.error("Booking submission error:", error);
+        }
+      });
     }
   };
 
@@ -137,18 +157,41 @@ export default function BookingPage() {
                     </div>
                     <div>
                       <Label htmlFor="time">時段 *</Label>
-                      <Select value={formData.time} onValueChange={(value) => handleInputChange("time", value)}>
-                        <SelectTrigger className={errors.time ? "border-destructive" : ""}>
-                          <SelectValue placeholder="選擇時段" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {timeSlots.map((slot) => (
-                            <SelectItem key={slot} value={slot}>
-                              {slot}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      
+                      {/* Loading State */}
+                      {timeSlotsLoading && (
+                        <Skeleton className="h-10 w-full" />
+                      )}
+                      
+                      {/* Error State */}
+                      {timeSlotsError && (
+                        <div className="text-sm text-destructive">
+                          載入時段資訊失敗，請重新整理頁面
+                        </div>
+                      )}
+                      
+                      {/* Time Slot Selection */}
+                      {timeSlots && !timeSlotsLoading && (
+                        <Select value={formData.time} onValueChange={(value) => handleInputChange("time", value)}>
+                          <SelectTrigger className={errors.time ? "border-destructive" : ""}>
+                            <SelectValue placeholder="選擇時段" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {timeSlots.map((slot) => (
+                              <SelectItem key={slot.id} value={slot.time}>
+                                <div className="flex flex-col gap-1">
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-medium">{slot.time}</span>
+                                    {slot.price && <Badge variant="secondary" className="text-xs">{slot.price}</Badge>}
+                                  </div>
+                                  <span className="text-xs text-muted-foreground">{slot.description}</span>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                      
                       {errors.time && <p className="text-sm text-destructive mt-1">{errors.time}</p>}
                     </div>
                   </div>
@@ -216,8 +259,13 @@ export default function BookingPage() {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full" size="lg">
-                    送出預約申請
+                  <Button 
+                    type="submit" 
+                    className="w-full" 
+                    size="lg"
+                    disabled={submitBookingMutation.isPending}
+                  >
+                    {submitBookingMutation.isPending ? "送出中..." : "送出預約申請"}
                   </Button>
                 </form>
               </CardContent>
@@ -273,30 +321,45 @@ export default function BookingPage() {
                 <CardTitle>預約須知</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4 text-sm">
-                <div>
-                  <h4 className="font-medium text-primary mb-2">預約流程</h4>
-                  <ul className="space-y-1 text-muted-foreground">
-                    <li>• 填寫預約表單</li>
-                    <li>• 等待電話確認</li>
-                    <li>• 確認後可現場付款</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-medium text-primary mb-2">取消政策</h4>
-                  <ul className="space-y-1 text-muted-foreground">
-                    <li>• 24小時前取消可全額退費</li>
-                    <li>• 12小時前取消退費50%</li>
-                    <li>• 12小時內恕不退費</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-medium text-primary mb-2">注意事項</h4>
-                  <ul className="space-y-1 text-muted-foreground">
-                    <li>• 請準時到達現場</li>
-                    <li>• 遊戲過程中請配合主持人</li>
-                    <li>• 建議提前10分鐘到場</li>
-                  </ul>
-                </div>
+                {bookingInfoLoading ? (
+                  <div className="space-y-4">
+                    <Skeleton className="h-4 w-1/3" />
+                    <Skeleton className="h-16 w-full" />
+                    <Skeleton className="h-4 w-1/3" />
+                    <Skeleton className="h-16 w-full" />
+                  </div>
+                ) : bookingInfo ? (
+                  <>
+                    <div>
+                      <h4 className="font-medium text-primary mb-2">預約流程</h4>
+                      <ul className="space-y-1 text-muted-foreground">
+                        {bookingInfo.policies.procedures.map((procedure, index) => (
+                          <li key={index}>• {procedure}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-primary mb-2">取消政策</h4>
+                      <ul className="space-y-1 text-muted-foreground">
+                        {bookingInfo.policies.cancellation.map((policy, index) => (
+                          <li key={index}>• {policy}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-primary mb-2">注意事項</h4>
+                      <ul className="space-y-1 text-muted-foreground">
+                        {bookingInfo.policies.notes.map((note, index) => (
+                          <li key={index}>• {note}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-sm text-muted-foreground">
+                    載入預約資訊中...
+                  </div>
+                )}
               </CardContent>
             </Card>
 

@@ -12,6 +12,24 @@ export interface Script {
   monthlyRecommended: boolean;
 }
 
+export interface TimeSlot {
+  id: string;
+  time: string;
+  description: string;
+  available: boolean;
+  price?: string;
+}
+
+export interface BookingInfo {
+  timeSlots: TimeSlot[];
+  playerCountOptions: { min: number; max: number; label: string }[];
+  policies: {
+    cancellation: string[];
+    procedures: string[];
+    notes: string[];
+  };
+}
+
 export const scripts: Script[] = [
   {
     id: 1,
@@ -283,4 +301,93 @@ export const getMonthlyRecommendedScripts = (): Script[] => {
 // 根據 ID 獲取劇本
 export const getScriptById = (id: number): Script | undefined => {
   return scripts.find(script => script.id === id);
+};
+
+// 預約相關資料
+export const bookingInfo: BookingInfo = {
+  timeSlots: [
+    {
+      id: "afternoon1",
+      time: "14:00-17:00",
+      description: "下午場次 - 輕鬆愉快的午後時光",
+      available: true,
+      price: "NT$ 680/人"
+    },
+    {
+      id: "afternoon2", 
+      time: "15:00-18:00",
+      description: "下午場次 - 適合新手體驗",
+      available: true,
+      price: "NT$ 680/人"
+    },
+    {
+      id: "evening1",
+      time: "18:00-21:00", 
+      description: "晚間場次 - 最受歡迎時段",
+      available: true,
+      price: "NT$ 780/人"
+    },
+    {
+      id: "evening2",
+      time: "19:00-22:00",
+      description: "晚間場次 - 沉浸式夜晚體驗", 
+      available: true,
+      price: "NT$ 780/人"
+    },
+    {
+      id: "weekend1",
+      time: "10:00-13:00",
+      description: "週末早場 - 精神飽滿開始冒險",
+      available: false, // 示例：某些時段可能不可用
+      price: "NT$ 880/人"
+    },
+    {
+      id: "weekend2",
+      time: "21:00-24:00",
+      description: "深夜場次 - 神秘刺激體驗",
+      available: true,
+      price: "NT$ 980/人"
+    }
+  ],
+  playerCountOptions: [
+    { min: 3, max: 4, label: "3-4人小隊" },
+    { min: 4, max: 6, label: "4-6人中隊" },
+    { min: 6, max: 8, label: "6-8人大隊" },
+    { min: 8, max: 10, label: "8-10人團隊" }
+  ],
+  policies: {
+    cancellation: [
+      "24小時前取消可全額退費",
+      "12小時前取消退費50%", 
+      "12小時內恕不退費",
+      "如遇不可抗力因素，可協商改期"
+    ],
+    procedures: [
+      "填寫預約表單並選擇劇本",
+      "等待客服電話確認詳細資訊",
+      "確認後可選擇線上付款或現場付款", 
+      "預約成功後會收到確認簡訊"
+    ],
+    notes: [
+      "請準時到達現場，建議提前10分鐘",
+      "遊戲過程中請配合主持人指導",
+      "如有身體不適或特殊需求請提前告知",
+      "現場提供免費茶水和小點心"
+    ]
+  }
+};
+
+// 獲取可用的時段
+export const getAvailableTimeSlots = (): TimeSlot[] => {
+  return bookingInfo.timeSlots.filter(slot => slot.available);
+};
+
+// 獲取所有時段（包含不可用的）
+export const getAllTimeSlots = (): TimeSlot[] => {
+  return bookingInfo.timeSlots;
+};
+
+// 獲取人數選項
+export const getPlayerCountOptions = () => {
+  return bookingInfo.playerCountOptions;
 };

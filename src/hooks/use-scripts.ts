@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { scriptsApi } from "@/lib/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { scriptsApi, bookingApi } from "@/lib/api";
 
 // Query keys for consistent cache management
 export const QUERY_KEYS = {
@@ -9,6 +9,10 @@ export const QUERY_KEYS = {
   category: (category: string) => ["scripts", "category", category] as const,
   difficulty: (difficulty: string) => ["scripts", "difficulty", difficulty] as const,
   search: (filters: any) => ["scripts", "search", filters] as const,
+  // Booking related keys
+  timeSlots: ["booking", "time-slots"] as const,
+  availableTimeSlots: ["booking", "available-time-slots"] as const,
+  bookingInfo: ["booking", "info"] as const,
 };
 
 // Hook for getting all scripts
@@ -65,5 +69,45 @@ export function useScriptsSearch(filters: {
     queryFn: () => scriptsApi.search(filters),
     // Only run query if at least one filter is provided
     enabled: !!(filters.category || filters.difficulty || filters.playerCount),
+  });
+}
+
+// ==================== Booking Hooks ====================
+
+// Hook for getting available time slots
+export function useAvailableTimeSlots() {
+  return useQuery({
+    queryKey: QUERY_KEYS.availableTimeSlots,
+    queryFn: bookingApi.getAvailableTimeSlots,
+  });
+}
+
+// Hook for getting all time slots (including unavailable)
+export function useAllTimeSlots() {
+  return useQuery({
+    queryKey: QUERY_KEYS.timeSlots,
+    queryFn: bookingApi.getAllTimeSlots,
+  });
+}
+
+// Hook for getting booking info (policies, etc.)
+export function useBookingInfo() {
+  return useQuery({
+    queryKey: QUERY_KEYS.bookingInfo,
+    queryFn: bookingApi.getBookingInfo,
+  });
+}
+
+// Hook for submitting booking
+export function useSubmitBooking() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: bookingApi.submitBooking,
+    onSuccess: () => {
+      // Invalidate and refetch time slots in case availability changed
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.availableTimeSlots });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.timeSlots });
+    },
   });
 }
