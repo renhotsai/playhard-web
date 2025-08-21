@@ -1,10 +1,13 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import MonthlyRecommendations from "@/components/monthly-recommendations";
-import { getMonthlyRecommendedScripts } from "@/data/scripts";
+import { useMonthlyRecommended } from "@/hooks/use-scripts";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Home() {
-  const monthlyScripts = getMonthlyRecommendedScripts();
+  const { data: monthlyScripts, isLoading, error } = useMonthlyRecommended();
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -29,9 +32,38 @@ export default function Home() {
       <section className="py-12">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">本月推薦</h2>
-          <div className="py-8">
-            <MonthlyRecommendations scripts={monthlyScripts} />
-          </div>
+          
+          {/* Loading State */}
+          {isLoading && (
+            <div className="py-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="space-y-4">
+                    <Skeleton className="h-48 w-full rounded-lg" />
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-4 w-1/2" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <div className="py-8 text-center">
+              <p className="text-destructive mb-4">載入推薦劇本時發生錯誤</p>
+              <Button onClick={() => window.location.reload()} variant="outline">
+                重新載入
+              </Button>
+            </div>
+          )}
+
+          {/* Success State */}
+          {monthlyScripts && !isLoading && (
+            <div className="py-8">
+              <MonthlyRecommendations scripts={monthlyScripts} />
+            </div>
+          )}
           
           <div className="text-center mt-8">
             <Button asChild variant="outline" size="lg">

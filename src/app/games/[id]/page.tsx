@@ -1,10 +1,13 @@
+"use client";
+
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 import Link from "next/link";
-import { getScriptById } from "@/data/scripts";
+import { useScript } from "@/hooks/use-scripts";
 
 const colorMap = {
   "chart-1": "bg-orange-500",
@@ -16,7 +19,55 @@ const colorMap = {
 
 export default function ScriptDetailPage({ params }: { params: { id: string } }) {
   const scriptId = parseInt(params.id);
-  const script = getScriptById(scriptId);
+  const { data: script, isLoading, error } = useScript(scriptId);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background py-8">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="mb-8">
+            <Skeleton className="h-10 w-32" />
+          </div>
+          <Card className="mb-8">
+            <Skeleton className="aspect-video w-full" />
+            <CardHeader>
+              <Skeleton className="h-8 w-3/4" />
+              <Skeleton className="h-6 w-1/2" />
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <Skeleton className="h-6 w-1/3" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                </div>
+                <div className="space-y-4">
+                  <Skeleton className="h-6 w-1/3" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-full" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background py-8">
+        <div className="container mx-auto px-4 max-w-4xl text-center">
+          <p className="text-destructive mb-4">載入劇本詳情時發生錯誤</p>
+          <Button onClick={() => window.location.reload()} variant="outline">
+            重新載入
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   if (!script) {
     notFound();

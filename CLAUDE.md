@@ -56,17 +56,35 @@ Next.js 15 application using App Router with TypeScript:
 - **TypeScript**: Strict mode enabled
 - **TailwindCSS v4**: Utility-first CSS with CSS variables
 - **shadcn/ui**: "new-york" style components
+- **@tanstack/react-query**: Powerful async state management and data fetching
 - **Embla Carousel**: Auto-scrolling carousel with hover controls
 - **next-themes**: Theme management
 - **Lucide React**: Icon library
 
-## Recommended TanStack Packages
+## Data Management with React Query
 
-Consider adding these TanStack packages for enhanced functionality:
+The project uses **@tanstack/react-query** for efficient data fetching and state management:
 
-- **@tanstack/react-query**: Powerful async state management and data fetching
-  - `npm install @tanstack/react-query`
-  - Perfect for API calls, caching, and server state management
+### Query Hooks (`/src/hooks/use-scripts.ts`)
+- **`useScripts()`**: Fetches all scripts with caching
+- **`useScript(id)`**: Fetches individual script by ID
+- **`useMonthlyRecommended()`**: Fetches monthly recommended scripts
+- **`useScriptsSearch(filters)`**: Searches scripts with category/difficulty/player filters
+
+### API Layer (`/src/lib/api.ts`)
+- Simulates realistic API calls with network delays
+- Centralized data fetching functions
+- Consistent error handling and response formatting
+
+### Query Configuration
+- **5 minute stale time**: Data stays fresh for 5 minutes
+- **10 minute garbage collection**: Unused data cleaned up after 10 minutes
+- **1 retry attempt**: Failed requests retry once
+- **Smart refetching**: Only refetch on window focus in production
+
+## Additional TanStack Packages
+
+Consider these TanStack packages for enhanced functionality:
 
 - **@tanstack/react-form**: Type-safe, performant form management
   - `npm install @tanstack/react-form`

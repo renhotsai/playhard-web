@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import ScriptCard from "@/components/script-card";
-import { scripts } from "@/data/scripts";
+import { useScriptsSearch, useScripts } from "@/hooks/use-scripts";
 
 const categories = ["全部", "推理", "生存", "武俠", "科幻", "懸疑", "恐怖", "冒險", "古裝", "奇幻", "諜戰", "現代", "治癒"];
 const difficulties = ["全部", "簡單", "中等", "困難"];
@@ -15,25 +16,19 @@ export default function GamesPage() {
   const [selectedDifficulty, setSelectedDifficulty] = useState("全部");
   const [selectedPlayerCount, setSelectedPlayerCount] = useState("全部");
 
-  const filteredScripts = useMemo(() => {
-    return scripts.filter((script) => {
-      const categoryMatch = selectedCategory === "全部" || script.category === selectedCategory;
-      const difficultyMatch = selectedDifficulty === "全部" || script.difficulty === selectedDifficulty;
-      
-      let playerCountMatch = true;
-      if (selectedPlayerCount !== "全部") {
-        if (selectedPlayerCount === "4-6人") {
-          playerCountMatch = script.players.includes("4") || script.players.includes("5") || script.players.includes("6");
-        } else if (selectedPlayerCount === "6-8人") {
-          playerCountMatch = script.players.includes("6") || script.players.includes("7") || script.players.includes("8");
-        } else if (selectedPlayerCount === "8人以上") {
-          playerCountMatch = script.players.includes("8") || script.players.includes("9");
-        }
-      }
-      
-      return categoryMatch && difficultyMatch && playerCountMatch;
-    });
-  }, [selectedCategory, selectedDifficulty, selectedPlayerCount]);
+  // Use React Query for filtered results or all scripts
+  const hasFilters = selectedCategory !== "全部" || selectedDifficulty !== "全部" || selectedPlayerCount !== "全部";
+  
+  const searchQuery = useScriptsSearch({
+    category: selectedCategory,
+    difficulty: selectedDifficulty,
+    playerCount: selectedPlayerCount,
+  });
+  
+  const allScriptsQuery = useScripts();
+  
+  // Use search results if filters are applied, otherwise use all scripts
+  const { data: scripts, isLoading, error } = hasFilters ? searchQuery : allScriptsQuery;
 
   return (
     <div className="min-h-screen bg-background py-8">
@@ -97,41 +92,69 @@ export default function GamesPage() {
           </div>
         </div>
 
-        {/* Results Count */}
-        <div className="mb-6">
-          <p className="text-muted-foreground">
-            找到 {filteredScripts.length} 個符合條件的劇本
-          </p>
-        </div>
+        {/* Loading State */}
+        {isLoading && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="space-y-4">
+                <Skeleton className="h-48 w-full rounded-lg" />
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+              </div>
+            ))}
+          </div>
+        )}
 
-        {/* Scripts Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {filteredScripts.map((script) => (
-            <ScriptCard 
-              key={script.id} 
-              script={script} 
-              showButton={true}
-              buttonText="查看詳情"
-              className="hover:shadow-lg transition-shadow"
-            />
-          ))}
-        </div>
-
-        {/* No Results */}
-        {filteredScripts.length === 0 && (
+        {/* Error State */}
+        {error && (
           <div className="text-center py-12">
-            <p className="text-lg text-muted-foreground mb-4">沒有找到符合條件的劇本</p>
-            <Button 
-              variant="outline" 
-              onClick={() => {
-                setSelectedCategory("全部");
-                setSelectedDifficulty("全部");
-                setSelectedPlayerCount("全部");
-              }}
-            >
-              重置篩選條件
+            <p className="text-destructive mb-4">載入劇本時發生錯誤</p>
+            <Button onClick={() => window.location.reload()} variant="outline">
+              重新載入
             </Button>
           </div>
+        )}
+
+        {/* Success State */}
+        {scripts && !isLoading && (
+          <>
+            {/* Results Count */}
+            <div className="mb-6">
+              <p className="text-muted-foreground">
+                找到 {scripts.length} 個符合條件的劇本
+              </p>
+            </div>
+
+            {/* Scripts Grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              {scripts.map((script) => (
+                <ScriptCard 
+                  key={script.id} 
+                  script={script} 
+                  showButton={true}
+                  buttonText="查看詳情"
+                  className="hover:shadow-lg transition-shadow"
+                />
+              ))}
+            </div>
+
+            {/* No Results */}
+            {scripts.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-lg text-muted-foreground mb-4">沒有找到符合條件的劇本</p>
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    setSelectedCategory("全部");
+                    setSelectedDifficulty("全部");
+                    setSelectedPlayerCount("全部");
+                  }}
+                >
+                  重置篩選條件
+                </Button>
+              </div>
+            )}
+          </>
         )}
 
         {/* CTA Section */}
