@@ -1,176 +1,175 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 玩硬劇本館 官方網站
 
-## Getting Started
+專業劇本殺體驗館的官方網站，提供多樣化劇本選擇，營造沉浸式遊戲體驗。立即預約，與朋友一起享受推理樂趣！
 
-First, run the development server:
+## 🎭 功能特色
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **劇本展示**: 完整的劇本資訊，包含角色介紹、故事背景和遊戲規則
+- **線上預約**: 便捷的預約系統，選擇劇本、時間和人數
+- **響應式設計**: 完美適配手機、平板和桌面設備
+- **主題切換**: 支援深色/淺色主題模式
+- **智慧推薦**: 月度推薦劇本輪播系統
+- **分類篩選**: 依據類型和人數篩選劇本
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 技術架構
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **框架**: [Next.js 15](https://nextjs.org) - React 全棧框架，使用 App Router
+- **開發工具**: Turbopack - 超快速的開發伺服器和構建工具
+- **程式語言**: TypeScript - 型別安全的 JavaScript
+- **UI 組件**: [shadcn/ui](https://ui.shadcn.com/) - 基於 Radix UI 的現代組件庫
+- **樣式系統**: [Tailwind CSS v4](https://tailwindcss.com/) - 工具優先的 CSS 框架
+- **主題管理**: next-themes - 深色/淺色主題切換
+- **輪播組件**: Embla Carousel - 觸控友好的輪播元件
+- **圖示庫**: Lucide React - 現代 SVG 圖示
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 開始使用
 
-## Learn More
+### 環境需求
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js 18+
+- npm 或 yarn
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 安裝與運行
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# web
-
-A murder mystery script showcase website for browsing and exploring Chinese murder mystery party game scripts (劇本殺). The application displays script collections with detailed information including characters, storylines, game rules, and social features.
-
-## 🎭 Features
-
-- **Script Showcase**: Browse comprehensive murder mystery scripts with detailed character information
-- **Category System**: Organized by mystery, horror, fantasy, emotion, ancient, and modern themes
-- **Monthly Highlights**: Featured scripts carousel with seasonal recommendations
-- **Hot Recommendations**: Popular and trending scripts with ratings
-- **Responsive Design**: Optimized for mobile and desktop viewing
-- **Dark Mystery Theme**: Custom UI with immersive dark color scheme
-- **SEO Optimized**: Comprehensive meta tags and structured data
-
-## 🚀 Tech Stack
-
-- **Framework**: [TanStack Start](https://tanstack.com/start) - Full-stack React framework
-- **Router**: [TanStack React Router](https://tanstack.com/router) - File-based routing with type safety
-- **Frontend**: React 19 with TypeScript
-- **Build Tool**: Vite
-- **UI Components**: [shadcn/ui](https://ui.shadcn.com/) with Radix UI primitives
-- **Styling**: Tailwind CSS with custom mystery theme
-- **Icons**: Lucide React
-- **Carousel**: Embla Carousel
-
-## 📦 Getting Started
-
-### Prerequisites
-
-- Node.js 18+ 
-- npm or yarn
-
-### Installation
-
-1. Clone the repository:
+1. 複製專案：
 ```bash
 git clone https://github.com/playhardtw/web.git
 cd web
 ```
 
-2. Install dependencies:
+2. 安裝依賴：
 ```bash
 npm install
 ```
 
-3. Start the development server:
+3. 啟動開發伺服器：
 ```bash
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:3000`
+4. 開啟瀏覽器訪問 `http://localhost:3000`
 
-## 🛠️ Development Commands
+## 🛠️ 開發指令
 
 ```bash
-# Development server
+# 啟動開發伺服器（使用 Turbopack）
 npm run dev
 
-# Build for production
+# 構建生產版本（使用 Turbopack）
 npm run build
 
-# Lint code
-npm run lint
+# 啟動生產伺服器
+npm start
 
-# Fix linting issues
-npm run lint:fix
+# 程式碼檢查
+npm run lint
 ```
 
-## 📁 Project Structure
+## 📁 專案結構
 
 ```
 src/
-├── routes/                 # File-based routing
-│   ├── __root.tsx         # Root layout with SEO
-│   ├── index.tsx          # Home page
-│   ├── categories/        # Category system
-│   └── script/            # Script detail pages
-├── components/            # UI Components
-│   ├── ui/                # shadcn/ui components
-│   ├── Header.tsx         # Navigation header
-│   ├── Footer.tsx         # Site footer
-│   └── ScriptCard.tsx     # Script display component
-├── data/                  # Mock data and APIs
-├── types/                 # TypeScript definitions
-└── lib/                   # Utility functions
+├── app/                    # Next.js App Router
+│   ├── layout.tsx         # 根佈局組件
+│   ├── page.tsx           # 首頁
+│   ├── games/             # 劇本介紹頁面
+│   ├── booking/           # 線上預約頁面
+│   ├── about/             # 關於我們
+│   └── contact/           # 聯絡我們
+├── components/            # React 組件
+│   ├── ui/                # shadcn/ui 基礎組件
+│   ├── navigation.tsx     # 導航欄
+│   ├── theme-provider.tsx # 主題提供者
+│   ├── mode-toggle.tsx    # 主題切換按鈕
+│   └── monthly-recommendations.tsx # 月度推薦輪播
+├── data/                  # 模擬資料
+│   └── scripts.ts         # 劇本資料
+└── lib/                   # 工具函數
+    └── utils.ts           # 通用工具
 ```
 
-## 🎨 Design System
+## 🎨 設計系統
 
-The project uses a custom mystery theme with:
+### 色彩主題
+- **導航欄**: 自訂橙色主題 (`--nav-primary`, `--nav-primary-foreground`)
+- **主要內容**: 白色背景搭配原生 shadcn/ui 色彩
+- **主題切換**: 支援系統預設、深色和淺色模式
 
-- **Dark Color Palette**: Black, dark gray backgrounds with red and gold accents
-- **Typography**: Inter and Noto Sans TC fonts for Chinese support
-- **Components**: shadcn/ui components with custom mystery styling
-- **Responsive Design**: Mobile-first approach with Tailwind breakpoints
+### 響應式設計
+- **手機**: 單欄佈局，折疊式選單
+- **平板**: 雙欄網格，展開式導航
+- **桌面**: 三欄網格，完整功能展示
 
-## 🌟 Key Features
+### 組件特色
+- **智慧輪播**: 少於4個項目顯示網格，超過4個自動切換為輪播
+- **懸停效果**: 卡片放大效果，需要適當的容器空間管理
+- **主題一致性**: 導航欄和主題切換保持橙色配色
 
-### Script Management
-- Comprehensive script database with rich metadata
-- Character profiles with backgrounds and relationships
-- Game mechanics and rules documentation
-- Rating and popularity tracking
+## 🌟 核心功能
 
-### User Experience
-- Intuitive navigation with dropdown category menus
-- Touch-friendly carousel interfaces
-- Hover effects and smooth transitions
-- Accessible design with proper ARIA labels
+### 劇本管理
+- 20個精選劇本，包含詳細資訊
+- 角色介紹、遊戲時長、適合人數
+- 類型分類和難度評級
 
-### Performance
-- Server-side rendering with TanStack Start
-- Optimized images with lazy loading
-- Type-safe routing and data loading
-- SEO optimization for search engines
+### 預約系統
+- 日期選擇（防止選擇過去日期）
+- 時段選擇和人數設定
+- 表單驗證和錯誤處理
 
-## 🚢 Deployment
+### 用戶體驗
+- 載入狀態處理，避免水合錯誤
+- 平滑動畫和過渡效果
+- 無障礙設計，支援鍵盤導航
 
-The application is built with Vite and can be deployed to any static hosting service:
+## 🚀 部署
 
+專案支援多種部署方式：
+
+### Vercel（推薦）
 ```bash
 npm run build
+# 或直接連接 GitHub repository 到 Vercel
 ```
 
-This creates a `dist` folder with the production build.
+### 其他平台
+```bash
+npm run build
+npm start
+# 生成的 .next 資料夾包含所有靜態資源
+```
 
-## 📄 License
+## 🔧 環境設定
 
-All rights reserved © 2024 web
+專案使用以下設定檔：
 
-## 🤝 Contributing
+- `next.config.ts` - Next.js 設定（圖片最佳化）
+- `tailwind.config.ts` - Tailwind CSS 設定
+- `components.json` - shadcn/ui 組件設定
+- `CLAUDE.md` - Claude Code 開發指引
 
-This is a showcase project. For questions or suggestions, please open an issue on GitHub.
+## 📱 功能頁面
+
+- **首頁**: 英雄區塊、月度推薦、功能介紹、行動呼籲
+- **劇本介紹**: 20個模擬劇本，支援篩選和分類
+- **線上預約**: 預約表單，劇本選擇和時段預訂
+- **關於我們**: 公司故事、團隊資訊、營業時間
+- **聯絡我們**: 聯絡表單、位置資訊、社群連結
+
+## 🤝 貢獻指南
+
+歡迎提交問題和功能建議！請遵循以下步驟：
+
+1. Fork 此專案
+2. 建立功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交變更 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 開啟 Pull Request
+
+## 📄 授權條款
+
+© 2024 玩硬劇本館。保留所有權利。
 
 ---
 
-Built with ❤️ using modern React and TypeScript
->>>>>>> 2eec19d54b9fb7654108400140375f3044a139cd
+使用現代 React 和 TypeScript 技術建構 ❤️
