@@ -7,29 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-const scripts = [
-  "謎霧莊園 (6-8人, 3-4小時)",
-  "末日求生 (4-6人, 2-3小時)", 
-  "江湖恩仇 (5-7人, 4-5小時)",
-  "星際迷航 (4-6人, 3-4小時)",
-  "校園懸疑 (5-8人, 2-3小時)",
-  "恐怖旅館 (4-6人, 2-3小時)",
-  "都市傳說 (6-8人, 3-4小時)",
-  "古宅魅影 (5-7人, 4-5小時)",
-  "海盜寶藏 (4-6人, 2-3小時)",
-  "時空穿越 (5-8人, 3-4小時)",
-  "皇宮密謀 (6-9人, 4-5小時)",
-  "偵探事務所 (4-7人, 2-3小時)",
-  "末世重生 (5-7人, 3-4小時)",
-  "魔法學院 (6-8人, 3-4小時)",
-  "豪門恩怨 (5-8人, 4-5小時)",
-  "間諜風雲 (4-6人, 3-4小時)",
-  "異域傳說 (5-7人, 2-3小時)",
-  "醫院驚魂 (4-6人, 2-3小時)",
-  "商戰風雲 (6-9人, 4-5小時)",
-  "時光咖啡館 (4-6人, 2-3小時)"
-];
+import { Skeleton } from "@/components/ui/skeleton";
+import { useScripts } from "@/hooks/use-scripts";
 
 const timeSlots = [
   "14:00-17:00",
@@ -40,6 +19,8 @@ const timeSlots = [
 
 export default function BookingPage() {
   const [minDate, setMinDate] = useState("");
+  const { data: scripts, isLoading: scriptsLoading, error: scriptsError } = useScripts();
+  
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -174,18 +155,38 @@ export default function BookingPage() {
 
                   <div>
                     <Label htmlFor="script">劇本選擇 *</Label>
-                    <Select value={formData.script} onValueChange={(value) => handleInputChange("script", value)}>
-                      <SelectTrigger className={errors.script ? "border-destructive" : ""}>
-                        <SelectValue placeholder="選擇劇本" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {scripts.map((script) => (
-                          <SelectItem key={script} value={script}>
-                            {script}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    
+                    {/* Loading State */}
+                    {scriptsLoading && (
+                      <Skeleton className="h-10 w-full" />
+                    )}
+                    
+                    {/* Error State */}
+                    {scriptsError && (
+                      <div className="text-sm text-destructive">
+                        載入劇本列表失敗，請重新整理頁面
+                      </div>
+                    )}
+                    
+                    {/* Script Selection */}
+                    {scripts && !scriptsLoading && (
+                      <Select value={formData.script} onValueChange={(value) => handleInputChange("script", value)}>
+                        <SelectTrigger className={errors.script ? "border-destructive" : ""}>
+                          <SelectValue placeholder="選擇劇本" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {scripts.map((script) => (
+                            <SelectItem 
+                              key={script.id} 
+                              value={`${script.title} (${script.players}, ${script.duration})`}
+                            >
+                              {script.title} ({script.players}, {script.duration})
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                    
                     {errors.script && <p className="text-sm text-destructive mt-1">{errors.script}</p>}
                   </div>
 
@@ -224,6 +225,49 @@ export default function BookingPage() {
           </div>
 
           <div className="space-y-6">
+            {/* Selected Script Info */}
+            {formData.script && scripts && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>所選劇本資訊</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {(() => {
+                    const selectedScript = scripts.find(script => 
+                      `${script.title} (${script.players}, ${script.duration})` === formData.script
+                    );
+                    
+                    if (!selectedScript) return null;
+                    
+                    return (
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-semibold text-lg">{selectedScript.title}</h4>
+                          <p className="text-sm text-muted-foreground">
+                            {selectedScript.category} • {selectedScript.players} • {selectedScript.duration}
+                            {selectedScript.difficulty && ` • 難度：${selectedScript.difficulty}`}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm leading-relaxed">{selectedScript.description}</p>
+                        </div>
+                        <div>
+                          <h5 className="font-medium mb-2">遊戲特色</h5>
+                          <div className="flex flex-wrap gap-1">
+                            {selectedScript.features.map((feature) => (
+                              <span key={feature} className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded">
+                                {feature}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </CardContent>
+              </Card>
+            )}
+
             <Card>
               <CardHeader>
                 <CardTitle>預約須知</CardTitle>
