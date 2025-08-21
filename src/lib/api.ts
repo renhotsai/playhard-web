@@ -1,5 +1,5 @@
 import { Script, TimeSlot, BookingInfo } from "@/data/scripts";
-import { scripts, bookingInfo, getAvailableTimeSlots, getAllTimeSlots } from "@/data/scripts";
+import { scripts, bookingInfo, getAvailableTimeSlots, getAllTimeSlots, getTimeSlotsForScript, parseScriptSelection } from "@/data/scripts";
 
 // Simulate API delay for more realistic behavior
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -86,8 +86,16 @@ export const bookingApi = {
     return bookingInfo;
   },
 
+  // Get time slots for specific script
+  getTimeSlotsForScript: async (scriptSelection: string): Promise<TimeSlot[]> => {
+    await delay(150);
+    const scriptId = parseScriptSelection(scriptSelection);
+    if (!scriptId) return [];
+    return getTimeSlotsForScript(scriptId);
+  },
+
   // Submit booking (simulate API call)
-  submitBooking: async (bookingData: {
+  submitBooking: async (_bookingData: {
     name: string;
     phone: string;
     email: string;

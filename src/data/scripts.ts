@@ -18,10 +18,17 @@ export interface TimeSlot {
   description: string;
   available: boolean;
   price?: string;
+  suitableForScripts?: number[]; // Script IDs that are suitable for this time slot
+}
+
+export interface ScriptTimeSlot {
+  scriptId: number;
+  availableTimeSlots: string[]; // TimeSlot IDs available for this script
 }
 
 export interface BookingInfo {
   timeSlots: TimeSlot[];
+  scriptTimeSlots: ScriptTimeSlot[];
   playerCountOptions: { min: number; max: number; label: string }[];
   policies: {
     cancellation: string[];
@@ -311,44 +318,51 @@ export const bookingInfo: BookingInfo = {
       time: "14:00-17:00",
       description: "下午場次 - 輕鬆愉快的午後時光",
       available: true,
-      price: "NT$ 680/人"
+      price: "NT$ 680/人",
+      suitableForScripts: [1, 2, 5, 6, 9, 12, 16, 18, 20] // 較輕鬆的劇本
     },
     {
       id: "afternoon2", 
       time: "15:00-18:00",
       description: "下午場次 - 適合新手體驗",
       available: true,
-      price: "NT$ 680/人"
+      price: "NT$ 680/人",
+      suitableForScripts: [1, 2, 4, 5, 9, 12, 16, 17, 18, 20] // 新手友好劇本
     },
     {
       id: "evening1",
       time: "18:00-21:00", 
       description: "晚間場次 - 最受歡迎時段",
       available: true,
-      price: "NT$ 780/人"
+      price: "NT$ 780/人",
+      suitableForScripts: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] // 所有劇本適合
     },
     {
       id: "evening2",
       time: "19:00-22:00",
       description: "晚間場次 - 沉浸式夜晚體驗", 
       available: true,
-      price: "NT$ 780/人"
+      price: "NT$ 780/人",
+      suitableForScripts: [1, 3, 4, 7, 8, 10, 11, 13, 14, 15, 19] // 沉浸式劇本
     },
     {
       id: "weekend1",
       time: "10:00-13:00",
       description: "週末早場 - 精神飽滿開始冒險",
       available: false, // 示例：某些時段可能不可用
-      price: "NT$ 880/人"
+      price: "NT$ 880/人",
+      suitableForScripts: [2, 4, 9, 12, 16, 17, 20] // 適合早場的輕鬆劇本
     },
     {
       id: "weekend2",
       time: "21:00-24:00",
       description: "深夜場次 - 神秘刺激體驗",
       available: true,
-      price: "NT$ 980/人"
+      price: "NT$ 980/人",
+      suitableForScripts: [3, 6, 7, 8, 10, 11, 13, 14, 15, 18, 19] // 恐怖/懸疑劇本
     }
   ],
+  scriptTimeSlots: [], // 現在使用 suitableForScripts 邏輯，這個可以保留空陣列
   playerCountOptions: [
     { min: 3, max: 4, label: "3-4人小隊" },
     { min: 4, max: 6, label: "4-6人中隊" },
@@ -390,4 +404,24 @@ export const getAllTimeSlots = (): TimeSlot[] => {
 // 獲取人數選項
 export const getPlayerCountOptions = () => {
   return bookingInfo.playerCountOptions;
+};
+
+// 根據劇本ID獲取可用時段
+export const getTimeSlotsForScript = (scriptId: number): TimeSlot[] => {
+  return bookingInfo.timeSlots.filter(slot => 
+    slot.available && 
+    slot.suitableForScripts?.includes(scriptId)
+  );
+};
+
+// 解析劇本選擇字串獲取劇本ID
+export const parseScriptSelection = (scriptSelection: string): number | null => {
+  if (!scriptSelection) return null;
+  
+  // 從 "劇本標題 (人數, 時長)" 格式中找到對應的劇本
+  const script = scripts.find(s => 
+    `${s.title} (${s.players}, ${s.duration})` === scriptSelection
+  );
+  
+  return script?.id || null;
 };

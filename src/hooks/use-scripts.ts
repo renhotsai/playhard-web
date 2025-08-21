@@ -8,10 +8,11 @@ export const QUERY_KEYS = {
   monthlyRecommended: ["scripts", "monthly-recommended"] as const,
   category: (category: string) => ["scripts", "category", category] as const,
   difficulty: (difficulty: string) => ["scripts", "difficulty", difficulty] as const,
-  search: (filters: any) => ["scripts", "search", filters] as const,
+  search: (filters: Record<string, unknown>) => ["scripts", "search", filters] as const,
   // Booking related keys
   timeSlots: ["booking", "time-slots"] as const,
   availableTimeSlots: ["booking", "available-time-slots"] as const,
+  scriptTimeSlots: (scriptSelection: string) => ["booking", "script-time-slots", scriptSelection] as const,
   bookingInfo: ["booking", "info"] as const,
 };
 
@@ -95,6 +96,15 @@ export function useBookingInfo() {
   return useQuery({
     queryKey: QUERY_KEYS.bookingInfo,
     queryFn: bookingApi.getBookingInfo,
+  });
+}
+
+// Hook for getting time slots for specific script
+export function useScriptTimeSlots(scriptSelection: string) {
+  return useQuery({
+    queryKey: QUERY_KEYS.scriptTimeSlots(scriptSelection),
+    queryFn: () => bookingApi.getTimeSlotsForScript(scriptSelection),
+    enabled: !!scriptSelection, // Only run when script is selected
   });
 }
 

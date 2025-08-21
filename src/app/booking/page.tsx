@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,15 +9,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
-import { useScripts, useAvailableTimeSlots, useBookingInfo, useSubmitBooking } from "@/hooks/use-scripts";
+import { useScripts, useBookingInfo, useSubmitBooking, useScriptTimeSlots } from "@/hooks/use-scripts";
 
 export default function BookingPage() {
   const [minDate, setMinDate] = useState("");
-  const { data: scripts, isLoading: scriptsLoading, error: scriptsError } = useScripts();
-  const { data: timeSlots, isLoading: timeSlotsLoading, error: timeSlotsError } = useAvailableTimeSlots();
-  const { data: bookingInfo, isLoading: bookingInfoLoading } = useBookingInfo();
-  const submitBookingMutation = useSubmitBooking();
-  
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -29,9 +24,24 @@ export default function BookingPage() {
     notes: ""
   });
 
+  const prevScriptRef = useRef<string>("");
+
+  const { data: scripts, isLoading: scriptsLoading, error: scriptsError } = useScripts();
+  const { data: timeSlots, isLoading: timeSlotsLoading, error: timeSlotsError } = useScriptTimeSlots(formData.script);
+  const { data: bookingInfo, isLoading: bookingInfoLoading } = useBookingInfo();
+  const submitBookingMutation = useSubmitBooking();
+
   useEffect(() => {
     setMinDate(new Date().toISOString().split('T')[0]);
   }, []);
+
+  // Reset time selection when script changes
+  useEffect(() => {
+    if (prevScriptRef.current !== formData.script && formData.time) {
+      setFormData(prev => ({ ...prev, time: "" }));
+    }
+    prevScriptRef.current = formData.script;
+  }, [formData.script, formData.time]);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -158,20 +168,34 @@ export default function BookingPage() {
                     <div>
                       <Label htmlFor="time">時段 *</Label>
                       
+                      {/* No Script Selected */}
+                      {!formData.script && (
+                        <div className="text-sm text-muted-foreground">
+                          請先選擇劇本後查看可用時段
+                        </div>
+                      )}
+                      
                       {/* Loading State */}
-                      {timeSlotsLoading && (
+                      {formData.script && timeSlotsLoading && (
                         <Skeleton className="h-10 w-full" />
                       )}
                       
                       {/* Error State */}
-                      {timeSlotsError && (
+                      {formData.script && timeSlotsError && (
                         <div className="text-sm text-destructive">
                           載入時段資訊失敗，請重新整理頁面
                         </div>
                       )}
                       
+                      {/* No Available Time Slots */}
+                      {formData.script && !timeSlotsLoading && timeSlots && timeSlots.length === 0 && (
+                        <div className="text-sm text-muted-foreground">
+                          此劇本目前沒有可用時段
+                        </div>
+                      )}
+                      
                       {/* Time Slot Selection */}
-                      {timeSlots && !timeSlotsLoading && (
+                      {formData.script && timeSlots && timeSlots.length > 0 && !timeSlotsLoading && (
                         <Select value={formData.time} onValueChange={(value) => handleInputChange("time", value)}>
                           <SelectTrigger className={errors.time ? "border-destructive" : ""}>
                             <SelectValue placeholder="選擇時段" />
