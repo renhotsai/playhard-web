@@ -121,3 +121,53 @@ export function useSubmitBooking() {
     },
   });
 }
+
+// ==================== Scripts CRUD Hooks ====================
+
+// Hook for creating a new script
+export function useCreateScript() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: scriptsApi.create || ((script: any) => {
+      // Fallback for mock API - this will be replaced with real API
+      console.log('Creating script:', script);
+      return Promise.resolve(script);
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.scripts });
+    },
+  });
+}
+
+// Hook for updating a script
+export function useUpdateScript() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: scriptsApi.update || ((script: any) => {
+      // Fallback for mock API - this will be replaced with real API
+      console.log('Updating script:', script);
+      return Promise.resolve(script);
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.scripts });
+    },
+  });
+}
+
+// Hook for deleting a script
+export function useDeleteScript() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: scriptsApi.delete || ((id: number) => {
+      // Fallback for mock API - this will be replaced with real API
+      console.log('Deleting script:', id);
+      return Promise.resolve(id);
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.scripts });
+    },
+  });
+}

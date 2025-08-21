@@ -1,0 +1,46 @@
+-- Complete data migration from mock data to Supabase
+-- Run this SQL in your Supabase SQL Editor
+
+-- First, clear existing data (optional)
+DELETE FROM scripts WHERE id > 0;
+DELETE FROM time_slots WHERE id != '';
+
+-- Insert all scripts data
+INSERT INTO scripts (id, title, category, players, duration, difficulty, description, features, image, monthly_recommended) VALUES
+(1, '夢境迷途', '奇幻冒險', '4-6人', '3-4小時', '中等', '在神祕的夢境世界中，玩家需要尋找回到現實的方法，過程中會遇到各種奇異的角色和挑戰。', '{"心理推理", "角色扮演", "團隊合作"}', '/images/scripts/dream-maze.jpg', true),
+(2, '血色莊園', '恐怖懸疑', '5-7人', '4-5小時', '困難', '古老莊園中隱藏著黑暗的秘密，每個角色都有不可告人的過去，真相往往比表面更加驚人。', '{"恐怖氛圍", "心理博弈", "多重反轉"}', '/images/scripts/blood-manor.jpg', true),
+(3, '時空偵探', '科幻推理', '4-5人', '3-4小時', '困難', '當時間旅行成為可能，犯罪也變得更加複雜。偵探們需要在不同時空中尋找線索，解開跨越時空的謎案。', '{"時空穿越", "邏輯推理", "科幻元素"}', '/images/scripts/time-detective.jpg', false),
+(4, '校園怪談', '懸疑恐怖', '6-8人', '3-4小時', '中等', '廢棄的學校中傳說著各種詭異的故事，學生們必須在午夜時分揭開學校的真正秘密。', '{"校園背景", "青春回憶", "懸疑氛圍"}', '/images/scripts/school-ghost.jpg', true),
+(5, '商戰風雲', '現代商業', '5-8人', '2-3小時', '簡單', '在商業世界的爾虞我詐中，每個商人都在為了利益而算計，誰能在這場商戰中笑到最後？', '{"商業策略", "談判博弈", "現實題材"}', '/images/scripts/business-war.jpg', false),
+(6, '古墓迷影', '冒險探險', '4-6人', '4-5小時', '中等', '考古學家們在古墓中發現了驚人的秘密，但同時也喚醒了沉睡已久的危險力量。', '{"考古冒險", "古代文明", "機關解謎"}', '/images/scripts/tomb-shadow.jpg', false),
+(7, '末日求生', '末世生存', '6-9人', '4-6小時', '困難', '當世界末日降臨，倖存者們必須在資源有限的情況下做出艱難的選擇，人性的考驗才剛開始。', '{"末世設定", "道德選擇", "團隊決策"}', '/images/scripts/doomsday.jpg', true),
+(8, '江湖恩仇', '武俠江湖', '5-7人', '3-4小時', '中等', '在刀光劍影的江湖中，每個人都背負著血海深仇，正邪善惡往往只在一念之間。', '{"武俠風格", "江湖情義", "復仇主線"}', '/images/scripts/martial-world.jpg', false),
+(9, '星際迷航', '科幻太空', '4-6人', '3-4小時', '中等', '在浩瀚的宇宙中，太空探險隊遭遇了未知的外星文明，如何化解危機成為關鍵。', '{"太空探險", "外星文明", "科技未來"}', '/images/scripts/space-trek.jpg', false),
+(10, '民國往事', '民國懸疑', '5-8人', '4-5小時', '困難', '在動盪的民國時期，上海灘的風雲人物們各懷心機，一起命案牽扯出更大的陰謀。', '{"民國背景", "時代氛圍", "歷史懸疑"}', '/images/scripts/republic-story.jpg', false),
+(11, '魔法學院', '奇幻魔法', '4-7人', '3-4小時', '簡單', '在神秘的魔法學院中，新生們必須學會使用魔法，同時解開學院中隱藏的古老謎團。', '{"魔法世界", "學院生活", "成長冒險"}', '/images/scripts/magic-academy.jpg', true),
+(12, '諜影重重', '間諜特工', '5-7人', '3-4小時', '困難', '冷戰時期的柏林，各國間諜展開了一場沒有硝煙的戰爭，每個人的身份都可能是偽裝。', '{"間諜題材", "身份謎團", "國際陰謀"}', '/images/scripts/spy-shadow.jpg', false),
+(13, '童話扭曲', '黑暗童話', '4-6人', '2-3小時', '簡單', '當經典童話遇上現實的殘酷，每個角色都必須面對自己內心的黑暗面。', '{"童話改編", "心理探索", "反差萌"}', '/images/scripts/twisted-fairy.jpg', false),
+(14, '賽博朋克', '未來科幻', '5-8人', '4-5小時', '困難', '在高科技低生活的未來都市中，駭客、企業家和反叛者展開了一場關於自由的戰爭。', '{"賽博朋克", "科技反思", "社會批判"}', '/images/scripts/cyberpunk.jpg', false),
+(15, '鄉村秘密', '現實懸疑', '4-6人', '3-4小時', '中等', '寧靜的鄉村小鎮隱藏著不為人知的秘密，當外來者闖入，平靜的生活開始波瀾四起。', '{"鄉村背景", "人情世故", "秘密揭露"}', '/images/scripts/village-secret.jpg', false),
+(16, '海盜傳說', '海盜冒險', '5-8人', '4-5小時', '中等', '在大航海時代，海盜們為了傳說中的寶藏展開了一場驚心動魄的冒險旅程。', '{"海盜冒險", "寶藏尋找", "海上探險"}', '/images/scripts/pirate-legend.jpg', true),
+(17, '都市傳說', '現代恐怖', '4-7人', '2-3小時', '簡單', '當都市傳說成為現實，普通人的生活開始變得詭異而危險，真相往往比傳說更可怕。', '{"都市傳說", "現代背景", "心理恐怖"}', '/images/scripts/urban-legend.jpg', false),
+(18, '宮廷秘史', '古代宮廷', '5-8人', '4-5小時', '困難', '在皇權爭奪的宮廷中，每個人都在暗中籌謀，一步走錯可能萬劫不復。', '{"宮廷政治", "權謀鬥爭", "古代背景"}', '/images/scripts/palace-secret.jpg', true),
+(19, '外星入侵', '科幻動作', '6-9人', '3-4小時', '中等', '當外星人入侵地球，人類必須團結一致對抗未知的威脅，但內部的分歧可能比外敵更危險。', '{"外星入侵", "團隊合作", "生存挑戰"}', '/images/scripts/alien-invasion.jpg', false),
+(20, '音樂之謎', '藝術懸疑', '4-6人', '3-4小時', '中等', '在音樂學院中，一首失傳的樂譜引發了一連串神秘事件，音樂背後隱藏著不為人知的故事。', '{"音樂主題", "藝術氛圍", "文化內涵"}', '/images/scripts/music-mystery.jpg', true);
+
+-- Insert time slots data with script-specific availability
+INSERT INTO time_slots (id, time, description, available, price, suitable_for_scripts) VALUES
+('afternoon1', '14:00-17:00', '下午場次 - 輕鬆愉快的午後時光', true, 'NT$ 680/人', '{1,2,5,6,9,12,16,18,20}'),
+('afternoon2', '15:00-18:00', '下午場次 - 適合新手體驗', true, 'NT$ 680/人', '{1,2,4,5,9,12,16,17,18,20}'),
+('evening1', '18:00-21:00', '晚間場次 - 最受歡迎時段', true, 'NT$ 780/人', '{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20}'),
+('evening2', '19:00-22:00', '晚間場次 - 沉浸式夜晚體驗', true, 'NT$ 780/人', '{1,3,4,7,8,10,11,13,14,15,19}'),
+('weekend1', '10:00-13:00', '週末早場 - 精神飽滿開始冒險', false, 'NT$ 880/人', '{2,4,9,12,16,17,20}'),
+('weekend2', '21:00-24:00', '深夜場次 - 神秘刺激體驗', true, 'NT$ 980/人', '{3,6,7,8,10,11,13,14,15,18,19}');
+
+-- Reset the sequence for scripts table to continue from the last inserted ID
+SELECT setval(pg_get_serial_sequence('scripts', 'id'), (SELECT MAX(id) FROM scripts));
+
+-- Verify the migration
+SELECT 'Scripts' as table_name, COUNT(*) as record_count FROM scripts
+UNION ALL
+SELECT 'Time Slots' as table_name, COUNT(*) as record_count FROM time_slots;

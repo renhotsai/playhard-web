@@ -172,6 +172,78 @@ export const supabaseScriptsApi = {
     
     return scripts;
   },
+
+  // Create new script
+  create: async (scriptData: Omit<Script, 'id'>): Promise<Script> => {
+    await delay(300);
+    
+    const { data, error } = await supabase
+      .from('scripts')
+      .insert([{
+        title: scriptData.title,
+        category: scriptData.category,
+        players: scriptData.players,
+        duration: scriptData.duration,
+        difficulty: scriptData.difficulty || null,
+        description: scriptData.description,
+        features: scriptData.features,
+        image: scriptData.image,
+        monthly_recommended: scriptData.monthlyRecommended
+      }])
+      .select()
+      .single();
+    
+    if (error) {
+      console.error('Error creating script:', error);
+      throw error;
+    }
+    
+    return transformScript(data);
+  },
+
+  // Update existing script
+  update: async (script: Script): Promise<Script> => {
+    await delay(300);
+    
+    const { data, error } = await supabase
+      .from('scripts')
+      .update({
+        title: script.title,
+        category: script.category,
+        players: script.players,
+        duration: script.duration,
+        difficulty: script.difficulty || null,
+        description: script.description,
+        features: script.features,
+        image: script.image,
+        monthly_recommended: script.monthlyRecommended
+      })
+      .eq('id', script.id)
+      .select()
+      .single();
+    
+    if (error) {
+      console.error('Error updating script:', error);
+      throw error;
+    }
+    
+    return transformScript(data);
+  },
+
+  // Delete script
+  delete: async (id: number): Promise<void> => {
+    await delay(200);
+    
+    const { error } = await supabase
+      .from('scripts')
+      .delete()
+      .eq('id', id);
+    
+    if (error) {
+      console.error('Error deleting script:', error);
+      throw error;
+    }
+  },
 };
 
 // Booking API functions using Supabase
