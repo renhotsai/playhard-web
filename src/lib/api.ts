@@ -64,6 +64,31 @@ export const scriptsApi = {
       return categoryMatch && difficultyMatch && playerCountMatch;
     });
   },
+
+  // Mock create method (for development)
+  create: async (scriptData: Omit<Script, 'id'>): Promise<Script> => {
+    await delay(300);
+    const newScript: Script = {
+      id: Date.now(), // Simple ID generation for mock
+      ...scriptData,
+      color: scriptData.color || '#3B82F6' // Default color for mock data
+    };
+    console.log('Mock: Creating script:', newScript);
+    return newScript;
+  },
+
+  // Mock update method (for development)  
+  update: async (script: Script): Promise<Script> => {
+    await delay(300);
+    console.log('Mock: Updating script:', script);
+    return script;
+  },
+
+  // Mock delete method (for development)
+  delete: async (id: number): Promise<void> => {
+    await delay(200);
+    console.log('Mock: Deleting script with id:', id);
+  },
 };
 
 // Booking API functions

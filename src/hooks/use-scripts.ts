@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { scriptsApi, bookingApi } from "@/lib/api-config";
+import { Script } from "@/data/scripts";
 
 // Query keys for consistent cache management
 export const QUERY_KEYS = {
@@ -129,7 +130,7 @@ export function useCreateScript() {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: scriptsApi.create || ((script: any) => {
+    mutationFn: scriptsApi.create || ((script: Omit<Script, 'id'>) => {
       // Fallback for mock API - this will be replaced with real API
       console.log('Creating script:', script);
       return Promise.resolve(script);
@@ -145,7 +146,7 @@ export function useUpdateScript() {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: scriptsApi.update || ((script: any) => {
+    mutationFn: scriptsApi.update || ((script: Script) => {
       // Fallback for mock API - this will be replaced with real API
       console.log('Updating script:', script);
       return Promise.resolve(script);

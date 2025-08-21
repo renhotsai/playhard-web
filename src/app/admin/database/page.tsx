@@ -10,7 +10,12 @@ import { Loader2, Database, Play, CheckCircle, XCircle, AlertTriangle } from "lu
 interface MigrationResult {
   success: boolean;
   message: string;
-  details?: any;
+  details?: {
+    scriptsMigrated?: number;
+    timeSlotsMigrated?: number;
+    timestamp?: string;
+    [key: string]: unknown;
+  };
 }
 
 export default function DatabaseAdminPage() {
@@ -48,7 +53,7 @@ export default function DatabaseAdminPage() {
         tables: {
           success: false,
           message: '創建表格時發生錯誤',
-          details: error
+          details: { error: error instanceof Error ? error.message : String(error) }
         }
       }));
     } finally {
@@ -83,7 +88,7 @@ export default function DatabaseAdminPage() {
         data: {
           success: false,
           message: '遷移資料時發生錯誤',
-          details: error
+          details: { error: error instanceof Error ? error.message : String(error) }
         }
       }));
     } finally {

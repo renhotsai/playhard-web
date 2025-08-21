@@ -88,7 +88,7 @@ export function ScriptEditDialog({ script, isOpen, onOpenChange, onSave }: Scrip
     setErrors({});
   }, [script]);
 
-  const handleInputChange = (field: keyof Script, value: any) => {
+  const handleInputChange = (field: keyof Script, value: string | boolean | string[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: "" }));
@@ -137,7 +137,8 @@ export function ScriptEditDialog({ script, isOpen, onOpenChange, onSave }: Scrip
         difficulty: formData.difficulty,
         description: formData.description!,
         features: formData.features || [],
-        image: formData.image!,
+        color: script?.color || '#3B82F6', // Default color if not provided
+        image: formData.image,
         monthlyRecommended: formData.monthlyRecommended || false
       };
       

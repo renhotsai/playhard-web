@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -73,7 +73,7 @@ export default function AdminScriptsPage() {
         await updateScriptMutation.mutateAsync(script);
       } else {
         // Create new script
-        const { id, ...scriptData } = script;
+        const { id: _id, ...scriptData } = script;
         await createScriptMutation.mutateAsync(scriptData);
       }
     } catch (error) {
@@ -82,7 +82,7 @@ export default function AdminScriptsPage() {
     }
   };
 
-  const handleDeleteScript = async (script: Script) => {
+  const handleDeleteScript = useCallback(async (script: Script) => {
     if (window.confirm(`確定要刪除劇本「${script.title}」嗎？`)) {
       try {
         await deleteScriptMutation.mutateAsync(script.id);
@@ -91,7 +91,7 @@ export default function AdminScriptsPage() {
         alert('刪除失敗，請稍後再試');
       }
     }
-  };
+  }, [deleteScriptMutation]);
 
   const getDifficultyColor = (difficulty?: string) => {
     switch (difficulty) {
@@ -244,7 +244,7 @@ export default function AdminScriptsPage() {
         },
       },
     ],
-    []
+    [deleteScriptMutation.isPending, handleDeleteScript]
   );
 
   const table = useReactTable({

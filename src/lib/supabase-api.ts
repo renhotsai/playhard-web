@@ -5,7 +5,19 @@ import { Script, TimeSlot, BookingInfo } from '@/data/scripts';
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Transform database row to Script interface
-const transformScript = (row: any): Script => ({
+const transformScript = (row: {
+  id: number;
+  title: string;
+  category: string;
+  players: string;
+  duration: string;
+  difficulty?: string | null;
+  description: string;
+  features: string[];
+  image: string;
+  monthly_recommended: boolean;
+  color?: string;
+}): Script => ({
   id: row.id,
   title: row.title,
   category: row.category,
@@ -14,12 +26,20 @@ const transformScript = (row: any): Script => ({
   difficulty: row.difficulty || undefined,
   description: row.description,
   features: row.features || [],
+  color: row.color || '#3B82F6',
   image: row.image,
   monthlyRecommended: row.monthly_recommended || false
 });
 
 // Transform database row to TimeSlot interface
-const transformTimeSlot = (row: any): TimeSlot => ({
+const transformTimeSlot = (row: {
+  id: string;
+  time: string;
+  description: string;
+  available: boolean;
+  price?: string | null;
+  suitable_for_scripts?: number[];
+}): TimeSlot => ({
   id: row.id,
   time: row.time,
   description: row.description,

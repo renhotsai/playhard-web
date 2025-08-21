@@ -46,7 +46,7 @@ export async function POST() {
       description: slot.description,
       available: slot.available,
       price: slot.price || null,
-      suitable_for_scripts: (slot as any).suitableForScripts || []
+      suitable_for_scripts: (slot as { suitableForScripts?: number[] }).suitableForScripts || []
     }));
 
     const { error: timeSlotsError } = await supabase
