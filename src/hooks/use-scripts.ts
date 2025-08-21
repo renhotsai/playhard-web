@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { scriptsApi, bookingApi } from "@/lib/api";
+import { scriptsApi, bookingApi } from "@/lib/api-config";
 
 // Query keys for consistent cache management
 export const QUERY_KEYS = {
