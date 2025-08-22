@@ -152,6 +152,43 @@ export default function BookingPage() {
                     />
                   </div>
 
+                  <div>
+                    <Label htmlFor="script">劇本選擇 *</Label>
+                    
+                    {/* Loading State */}
+                    {scriptsLoading && (
+                      <Skeleton className="h-10 w-full" />
+                    )}
+                    
+                    {/* Error State */}
+                    {scriptsError && (
+                      <div className="text-sm text-destructive">
+                        載入劇本列表失敗，請重新整理頁面
+                      </div>
+                    )}
+                    
+                    {/* Script Selection */}
+                    {scripts && !scriptsLoading && (
+                      <Select value={formData.script} onValueChange={(value) => handleInputChange("script", value)}>
+                        <SelectTrigger className={errors.script ? "border-destructive" : ""}>
+                          <SelectValue placeholder="選擇劇本" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {scripts.map((script) => (
+                            <SelectItem 
+                              key={script.id} 
+                              value={`${script.title} (${script.players}, ${script.duration})`}
+                            >
+                              {script.title} ({script.players}, {script.duration})
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                    
+                    {errors.script && <p className="text-sm text-destructive mt-1">{errors.script}</p>}
+                  </div>
+
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="date">預約日期 *</Label>
@@ -218,43 +255,6 @@ export default function BookingPage() {
                       
                       {errors.time && <p className="text-sm text-destructive mt-1">{errors.time}</p>}
                     </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="script">劇本選擇 *</Label>
-                    
-                    {/* Loading State */}
-                    {scriptsLoading && (
-                      <Skeleton className="h-10 w-full" />
-                    )}
-                    
-                    {/* Error State */}
-                    {scriptsError && (
-                      <div className="text-sm text-destructive">
-                        載入劇本列表失敗，請重新整理頁面
-                      </div>
-                    )}
-                    
-                    {/* Script Selection */}
-                    {scripts && !scriptsLoading && (
-                      <Select value={formData.script} onValueChange={(value) => handleInputChange("script", value)}>
-                        <SelectTrigger className={errors.script ? "border-destructive" : ""}>
-                          <SelectValue placeholder="選擇劇本" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {scripts.map((script) => (
-                            <SelectItem 
-                              key={script.id} 
-                              value={`${script.title} (${script.players}, ${script.duration})`}
-                            >
-                              {script.title} ({script.players}, {script.duration})
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                    
-                    {errors.script && <p className="text-sm text-destructive mt-1">{errors.script}</p>}
                   </div>
 
                   <div>

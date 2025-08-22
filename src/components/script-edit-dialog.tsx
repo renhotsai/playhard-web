@@ -22,8 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Script } from "@/data/scripts";
-import { X } from "lucide-react";
+import { Script, TimeSlot } from "@/data/scripts";
+import { X, Plus, Clock } from "lucide-react";
 
 interface ScriptEditDialogProps {
   script?: Script | null;
@@ -61,10 +61,18 @@ export function ScriptEditDialog({ script, isOpen, onOpenChange, onSave }: Scrip
     description: "",
     features: [],
     image: "",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: []
   });
   
   const [newFeature, setNewFeature] = useState("");
+  const [newTimeSlot, setNewTimeSlot] = useState<Partial<TimeSlot>>({
+    id: "",
+    time: "",
+    description: "",
+    available: true,
+    price: "NT$ 680/人"
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Initialize form data when script changes
@@ -82,7 +90,8 @@ export function ScriptEditDialog({ script, isOpen, onOpenChange, onSave }: Scrip
         description: "",
         features: [],
         image: "",
-        monthlyRecommended: false
+        monthlyRecommended: false,
+        timeSlots: []
       });
     }
     setErrors({});
@@ -109,6 +118,38 @@ export function ScriptEditDialog({ script, isOpen, onOpenChange, onSave }: Scrip
     setFormData(prev => ({
       ...prev,
       features: prev.features?.filter(feature => feature !== featureToRemove) || []
+    }));
+  };
+
+  const handleAddTimeSlot = () => {
+    if (newTimeSlot.id && newTimeSlot.time && newTimeSlot.description) {
+      const timeSlot: TimeSlot = {
+        id: newTimeSlot.id,
+        time: newTimeSlot.time,
+        description: newTimeSlot.description,
+        available: newTimeSlot.available ?? true,
+        price: newTimeSlot.price
+      };
+      
+      setFormData(prev => ({
+        ...prev,
+        timeSlots: [...(prev.timeSlots || []), timeSlot]
+      }));
+      
+      setNewTimeSlot({
+        id: "",
+        time: "",
+        description: "",
+        available: true,
+        price: "NT$ 680/人"
+      });
+    }
+  };
+
+  const handleRemoveTimeSlot = (timeSlotId: string) => {
+    setFormData(prev => ({
+      ...prev,
+      timeSlots: prev.timeSlots?.filter(slot => slot.id !== timeSlotId) || []
     }));
   };
 
@@ -139,7 +180,8 @@ export function ScriptEditDialog({ script, isOpen, onOpenChange, onSave }: Scrip
         features: formData.features || [],
         color: script?.color || '#3B82F6', // Default color if not provided
         image: formData.image,
-        monthlyRecommended: formData.monthlyRecommended || false
+        monthlyRecommended: formData.monthlyRecommended || false,
+        timeSlots: formData.timeSlots || []
       };
       
       onSave(scriptToSave);
@@ -303,6 +345,71 @@ export function ScriptEditDialog({ script, isOpen, onOpenChange, onSave }: Scrip
               className={errors.image ? "border-destructive" : ""}
             />
             {errors.image && <p className="text-sm text-destructive mt-1">{errors.image}</p>}
+          </div>
+
+          {/* Time Slots */}
+          <div>
+            <Label className="flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              可用時段
+            </Label>
+            <div className="space-y-3">
+              {/* Add new time slot */}
+              <div className="grid grid-cols-2 gap-2">
+                <Input
+                  placeholder="時段ID (例如：afternoon1)"
+                  value={newTimeSlot.id || ""}
+                  onChange={(e) => setNewTimeSlot(prev => ({ ...prev, id: e.target.value }))}
+                />
+                <Input
+                  placeholder="時間 (例如：14:00-17:00)"
+                  value={newTimeSlot.time || ""}
+                  onChange={(e) => setNewTimeSlot(prev => ({ ...prev, time: e.target.value }))}
+                />
+                <Input
+                  placeholder="描述"
+                  value={newTimeSlot.description || ""}
+                  onChange={(e) => setNewTimeSlot(prev => ({ ...prev, description: e.target.value }))}
+                />
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="價格"
+                    value={newTimeSlot.price || ""}
+                    onChange={(e) => setNewTimeSlot(prev => ({ ...prev, price: e.target.value }))}
+                  />
+                  <Button type="button" onClick={handleAddTimeSlot} variant="outline" size="sm">
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Existing time slots */}
+              <div className="space-y-2">
+                {formData.timeSlots?.map((slot, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 border rounded-md">
+                    <div className="flex-1">
+                      <div className="font-medium">{slot.time}</div>
+                      <div className="text-sm text-muted-foreground">{slot.description}</div>
+                      <div className="text-sm font-medium text-green-600">{slot.price}</div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={slot.available ? "default" : "secondary"}>
+                        {slot.available ? "可用" : "不可用"}
+                      </Badge>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRemoveTimeSlot(slot.id)}
+                        className="hover:text-destructive"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Monthly Recommended */}

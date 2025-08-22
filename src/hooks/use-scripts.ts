@@ -11,8 +11,6 @@ export const QUERY_KEYS = {
   difficulty: (difficulty: string) => ["scripts", "difficulty", difficulty] as const,
   search: (filters: Record<string, unknown>) => ["scripts", "search", filters] as const,
   // Booking related keys
-  timeSlots: ["booking", "time-slots"] as const,
-  availableTimeSlots: ["booking", "available-time-slots"] as const,
   scriptTimeSlots: (scriptSelection: string) => ["booking", "script-time-slots", scriptSelection] as const,
   bookingInfo: ["booking", "info"] as const,
 };
@@ -76,21 +74,7 @@ export function useScriptsSearch(filters: {
 
 // ==================== Booking Hooks ====================
 
-// Hook for getting available time slots
-export function useAvailableTimeSlots() {
-  return useQuery({
-    queryKey: QUERY_KEYS.availableTimeSlots,
-    queryFn: bookingApi.getAvailableTimeSlots,
-  });
-}
-
-// Hook for getting all time slots (including unavailable)
-export function useAllTimeSlots() {
-  return useQuery({
-    queryKey: QUERY_KEYS.timeSlots,
-    queryFn: bookingApi.getAllTimeSlots,
-  });
-}
+// Note: Time slots are now part of individual scripts, no longer standalone entities
 
 // Hook for getting booking info (policies, etc.)
 export function useBookingInfo() {
@@ -116,9 +100,8 @@ export function useSubmitBooking() {
   return useMutation({
     mutationFn: bookingApi.submitBooking,
     onSuccess: () => {
-      // Invalidate and refetch time slots in case availability changed
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.availableTimeSlots });
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.timeSlots });
+      // Invalidate script queries since time slots are now part of scripts
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.scripts });
     },
   });
 }

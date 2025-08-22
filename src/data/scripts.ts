@@ -1,3 +1,11 @@
+export interface TimeSlot {
+  id: string;
+  time: string;
+  description: string;
+  available: boolean;
+  price?: string;
+}
+
 export interface Script {
   id: number;
   title: string;
@@ -10,25 +18,10 @@ export interface Script {
   color: string;
   image?: string;
   monthlyRecommended: boolean;
-}
-
-export interface TimeSlot {
-  id: string;
-  time: string;
-  description: string;
-  available: boolean;
-  price?: string;
-  suitableForScripts?: number[]; // Script IDs that are suitable for this time slot
-}
-
-export interface ScriptTimeSlot {
-  scriptId: number;
-  availableTimeSlots: string[]; // TimeSlot IDs available for this script
+  timeSlots: TimeSlot[];
 }
 
 export interface BookingInfo {
-  timeSlots: TimeSlot[];
-  scriptTimeSlots: ScriptTimeSlot[];
   playerCountOptions: { min: number; max: number; label: string }[];
   policies: {
     cancellation: string[];
@@ -49,7 +42,11 @@ export const scripts: Script[] = [
     features: ["經典推理", "角色豐富", "劇情緊湊"],
     color: "chart-1",
     image: "https://images.unsplash.com/photo-1520637836862-4d197d17c50a?w=800&h=450&fit=crop",
-    monthlyRecommended: true
+    monthlyRecommended: true,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 2,
@@ -62,7 +59,11 @@ export const scripts: Script[] = [
     features: ["緊張刺激", "道德考驗", "資源管理"],
     color: "chart-2",
     image: "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=800&h=450&fit=crop",
-    monthlyRecommended: true
+    monthlyRecommended: true,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 3,
@@ -75,7 +76,11 @@ export const scripts: Script[] = [
     features: ["武俠風格", "門派爭鬥", "情仇交織"],
     color: "chart-3",
     image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=450&fit=crop",
-    monthlyRecommended: true
+    monthlyRecommended: true,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 4,
@@ -88,7 +93,11 @@ export const scripts: Script[] = [
     features: ["科幻設定", "太空冒險", "高科技道具"],
     color: "chart-4",
     image: "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=800&h=450&fit=crop",
-    monthlyRecommended: true
+    monthlyRecommended: true,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 5,
@@ -101,7 +110,11 @@ export const scripts: Script[] = [
     features: ["校園題材", "青春回憶", "情感豐富"],
     color: "chart-5",
     image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=450&fit=crop",
-    monthlyRecommended: true
+    monthlyRecommended: true,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 6,
@@ -114,7 +127,11 @@ export const scripts: Script[] = [
     features: ["恐怖氛圍", "心理驚悚", "沉浸體驗"],
     color: "chart-1",
     image: "https://images.unsplash.com/photo-1496096265110-f83ad7f96608?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 7,
@@ -127,7 +144,11 @@ export const scripts: Script[] = [
     features: ["現代背景", "心理懸疑", "多線劇情"],
     color: "chart-2",
     image: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 8,
@@ -140,7 +161,11 @@ export const scripts: Script[] = [
     features: ["古宅氛圍", "家族秘密", "靈異元素"],
     color: "chart-3",
     image: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 9,
@@ -153,7 +178,11 @@ export const scripts: Script[] = [
     features: ["冒險尋寶", "海盜主題", "團隊合作"],
     color: "chart-4",
     image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 10,
@@ -166,7 +195,11 @@ export const scripts: Script[] = [
     features: ["時空穿越", "多時代背景", "科幻謎題"],
     color: "chart-5",
     image: "https://images.unsplash.com/photo-1515378791036-0648a814c963?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 11,
@@ -179,7 +212,11 @@ export const scripts: Script[] = [
     features: ["古裝宮廷", "權謀鬥爭", "角色豐富"],
     color: "chart-1",
     image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 12,
@@ -192,7 +229,11 @@ export const scripts: Script[] = [
     features: ["經典推理", "連環案件", "邏輯解謎"],
     color: "chart-2",
     image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 13,
@@ -205,7 +246,11 @@ export const scripts: Script[] = [
     features: ["末世題材", "生存挑戰", "道德抉擇"],
     color: "chart-3",
     image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 14,
@@ -218,7 +263,11 @@ export const scripts: Script[] = [
     features: ["魔法奇幻", "學院背景", "超自然現象"],
     color: "chart-4",
     image: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 15,
@@ -231,7 +280,11 @@ export const scripts: Script[] = [
     features: ["豪門背景", "家族糾紛", "情感糾葛"],
     color: "chart-5",
     image: "https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 16,
@@ -244,7 +297,11 @@ export const scripts: Script[] = [
     features: ["諜戰題材", "身份隱藏", "策略博弈"],
     color: "chart-1",
     image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 17,
@@ -257,7 +314,11 @@ export const scripts: Script[] = [
     features: ["異域風情", "魔法元素", "預言解謎"],
     color: "chart-2",
     image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 18,
@@ -270,7 +331,11 @@ export const scripts: Script[] = [
     features: ["醫院場景", "心理恐怖", "黑暗實驗"],
     color: "chart-3",
     image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 19,
@@ -283,7 +348,11 @@ export const scripts: Script[] = [
     features: ["商戰題材", "現代背景", "複雜博弈"],
     color: "chart-4",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   },
   {
     id: 20,
@@ -296,7 +365,11 @@ export const scripts: Script[] = [
     features: ["溫馨治癒", "回憶主題", "情感共鳴"],
     color: "chart-5",
     image: "https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=800&h=450&fit=crop",
-    monthlyRecommended: false
+    monthlyRecommended: false,
+    timeSlots: [
+      { id: "afternoon1", time: "14:00-17:00", description: "下午場次 - 輕鬆愉快的午後時光", available: true, price: "NT$ 680/人" },
+      { id: "evening1", time: "18:00-21:00", description: "晚間場次 - 最受歡迎時段", available: true, price: "NT$ 780/人" }
+    ]
   }
 ];
 
@@ -312,57 +385,6 @@ export const getScriptById = (id: number): Script | undefined => {
 
 // 預約相關資料
 export const bookingInfo: BookingInfo = {
-  timeSlots: [
-    {
-      id: "afternoon1",
-      time: "14:00-17:00",
-      description: "下午場次 - 輕鬆愉快的午後時光",
-      available: true,
-      price: "NT$ 680/人",
-      suitableForScripts: [1, 2, 5, 6, 9, 12, 16, 18, 20] // 較輕鬆的劇本
-    },
-    {
-      id: "afternoon2", 
-      time: "15:00-18:00",
-      description: "下午場次 - 適合新手體驗",
-      available: true,
-      price: "NT$ 680/人",
-      suitableForScripts: [1, 2, 4, 5, 9, 12, 16, 17, 18, 20] // 新手友好劇本
-    },
-    {
-      id: "evening1",
-      time: "18:00-21:00", 
-      description: "晚間場次 - 最受歡迎時段",
-      available: true,
-      price: "NT$ 780/人",
-      suitableForScripts: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20] // 所有劇本適合
-    },
-    {
-      id: "evening2",
-      time: "19:00-22:00",
-      description: "晚間場次 - 沉浸式夜晚體驗", 
-      available: true,
-      price: "NT$ 780/人",
-      suitableForScripts: [1, 3, 4, 7, 8, 10, 11, 13, 14, 15, 19] // 沉浸式劇本
-    },
-    {
-      id: "weekend1",
-      time: "10:00-13:00",
-      description: "週末早場 - 精神飽滿開始冒險",
-      available: false, // 示例：某些時段可能不可用
-      price: "NT$ 880/人",
-      suitableForScripts: [2, 4, 9, 12, 16, 17, 20] // 適合早場的輕鬆劇本
-    },
-    {
-      id: "weekend2",
-      time: "21:00-24:00",
-      description: "深夜場次 - 神秘刺激體驗",
-      available: true,
-      price: "NT$ 980/人",
-      suitableForScripts: [3, 6, 7, 8, 10, 11, 13, 14, 15, 18, 19] // 恐怖/懸疑劇本
-    }
-  ],
-  scriptTimeSlots: [], // 現在使用 suitableForScripts 邏輯，這個可以保留空陣列
   playerCountOptions: [
     { min: 3, max: 4, label: "3-4人小隊" },
     { min: 4, max: 6, label: "4-6人中隊" },
@@ -391,16 +413,6 @@ export const bookingInfo: BookingInfo = {
   }
 };
 
-// 獲取可用的時段
-export const getAvailableTimeSlots = (): TimeSlot[] => {
-  return bookingInfo.timeSlots.filter(slot => slot.available);
-};
-
-// 獲取所有時段（包含不可用的）
-export const getAllTimeSlots = (): TimeSlot[] => {
-  return bookingInfo.timeSlots;
-};
-
 // 獲取人數選項
 export const getPlayerCountOptions = () => {
   return bookingInfo.playerCountOptions;
@@ -408,10 +420,8 @@ export const getPlayerCountOptions = () => {
 
 // 根據劇本ID獲取可用時段
 export const getTimeSlotsForScript = (scriptId: number): TimeSlot[] => {
-  return bookingInfo.timeSlots.filter(slot => 
-    slot.available && 
-    slot.suitableForScripts?.includes(scriptId)
-  );
+  const script = scripts.find(s => s.id === scriptId);
+  return script?.timeSlots?.filter(slot => slot.available) || [];
 };
 
 // 解析劇本選擇字串獲取劇本ID

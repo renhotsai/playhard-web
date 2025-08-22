@@ -16,6 +16,7 @@ const transformScript = (row: {
   features: string[];
   image: string;
   monthly_recommended: boolean;
+  time_slots?: TimeSlot[];
   color?: string;
 }): Script => ({
   id: row.id,
@@ -28,25 +29,10 @@ const transformScript = (row: {
   features: row.features || [],
   color: row.color || '#3B82F6',
   image: row.image,
-  monthlyRecommended: row.monthly_recommended || false
+  monthlyRecommended: row.monthly_recommended || false,
+  timeSlots: row.time_slots || []
 });
 
-// Transform database row to TimeSlot interface
-const transformTimeSlot = (row: {
-  id: string;
-  time: string;
-  description: string;
-  available: boolean;
-  price?: string | null;
-  suitable_for_scripts?: number[];
-}): TimeSlot => ({
-  id: row.id,
-  time: row.time,
-  description: row.description,
-  available: row.available,
-  price: row.price || undefined,
-  suitableForScripts: row.suitable_for_scripts || []
-});
 
 // Scripts API functions using Supabase
 export const supabaseScriptsApi = {
@@ -208,7 +194,8 @@ export const supabaseScriptsApi = {
         description: scriptData.description,
         features: scriptData.features,
         image: scriptData.image,
-        monthly_recommended: scriptData.monthlyRecommended
+        monthly_recommended: scriptData.monthlyRecommended,
+        time_slots: scriptData.timeSlots
       }])
       .select()
       .single();
@@ -236,7 +223,8 @@ export const supabaseScriptsApi = {
         description: script.description,
         features: script.features,
         image: script.image,
-        monthly_recommended: script.monthlyRecommended
+        monthly_recommended: script.monthlyRecommended,
+        time_slots: script.timeSlots
       })
       .eq('id', script.id)
       .select()
@@ -268,40 +256,6 @@ export const supabaseScriptsApi = {
 
 // Booking API functions using Supabase
 export const supabaseBookingApi = {
-  // Get available time slots
-  getAvailableTimeSlots: async (): Promise<TimeSlot[]> => {
-    await delay(150);
-    
-    const { data, error } = await supabase
-      .from('time_slots')
-      .select('*')
-      .eq('available', true)
-      .order('id');
-    
-    if (error) {
-      console.error('Error fetching available time slots:', error);
-      return [];
-    }
-    
-    return data?.map(transformTimeSlot) || [];
-  },
-
-  // Get all time slots (including unavailable)
-  getAllTimeSlots: async (): Promise<TimeSlot[]> => {
-    await delay(150);
-    
-    const { data, error } = await supabase
-      .from('time_slots')
-      .select('*')
-      .order('id');
-    
-    if (error) {
-      console.error('Error fetching all time slots:', error);
-      return [];
-    }
-    
-    return data?.map(transformTimeSlot) || [];
-  },
 
   // Get booking info (policies, player options, etc.) - static for now
   getBookingInfo: async (): Promise<BookingInfo> => {
@@ -310,8 +264,6 @@ export const supabaseBookingApi = {
     // For now, return static booking info since policies don't change often
     // This could be moved to database later if needed
     return {
-      timeSlots: await supabaseBookingApi.getAllTimeSlots(),
-      scriptTimeSlots: [], // Not used with current suitableForScripts approach
       playerCountOptions: [
         { min: 3, max: 4, label: "3-4人小隊" },
         { min: 4, max: 6, label: "4-6人中隊" },
@@ -348,18 +300,17 @@ export const supabaseBookingApi = {
     if (!scriptId) return [];
     
     const { data, error } = await supabase
-      .from('time_slots')
-      .select('*')
-      .eq('available', true)
-      .contains('suitable_for_scripts', [scriptId])
-      .order('id');
+      .from('scripts')
+      .select('time_slots')
+      .eq('id', scriptId)
+      .single();
     
     if (error) {
       console.error('Error fetching time slots for script:', error);
       return [];
     }
     
-    return data?.map(transformTimeSlot) || [];
+    return data?.time_slots || [];
   },
 
   // Submit booking (create new booking record)

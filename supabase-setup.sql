@@ -5,7 +5,7 @@
 -- STEP 1: CREATE TABLES
 -- =====================================================
 
--- Create scripts table
+-- Create scripts table with embedded time slots
 CREATE TABLE IF NOT EXISTS scripts (
   id SERIAL PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
@@ -17,19 +17,11 @@ CREATE TABLE IF NOT EXISTS scripts (
   features TEXT[] NOT NULL DEFAULT '{}',
   image VARCHAR(255) NOT NULL,
   monthly_recommended BOOLEAN DEFAULT FALSE,
+  time_slots JSONB NOT NULL DEFAULT '[]',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create time_slots table
-CREATE TABLE IF NOT EXISTS time_slots (
-  id VARCHAR(50) PRIMARY KEY,
-  time VARCHAR(50) NOT NULL,
-  description TEXT NOT NULL,
-  available BOOLEAN DEFAULT TRUE,
-  price VARCHAR(50),
-  suitable_for_scripts INTEGER[] NOT NULL DEFAULT '{}',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+-- Note: time_slots are now embedded in scripts table as JSONB
 
 -- Create bookings table
 CREATE TABLE IF NOT EXISTS bookings (
